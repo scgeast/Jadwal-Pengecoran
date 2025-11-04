@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concrete Pouring Schedule Monitoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -77,7 +79,9 @@
         }
         
         nav ul li a {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             color: var(--dark);
             text-decoration: none;
             padding: 18px 10px;
@@ -85,6 +89,11 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+        }
+        
+        nav ul li a i {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
         
         nav ul li a:hover {
@@ -131,33 +140,29 @@
             align-items: center;
         }
         
-        h2:before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 25px;
-            background-color: var(--secondary);
+        h2 i {
             margin-right: 12px;
-            border-radius: 4px;
+            color: var(--secondary);
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: var(--dark);
+            font-size: 0.9rem;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 6px;
+            font-size: 14px;
             transition: border 0.3s, box-shadow 0.3s;
         }
         
@@ -178,6 +183,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
@@ -231,12 +240,12 @@
         
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px;
             margin-top: 25px;
         }
         
-        .summary-card {
+        .plant-summary-card {
             background: linear-gradient(135deg, #fff, #f8f9fa);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -245,35 +254,71 @@
             border-left: 5px solid var(--secondary);
         }
         
-        .summary-card:hover {
+        .plant-summary-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
         
-        .summary-card h3 {
+        .plant-summary-card h3 {
             color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
         
-        .summary-card h3:before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 20px;
-            background-color: var(--secondary);
-            margin-right: 10px;
-            border-radius: 3px;
+        .plant-summary-card h3 i {
+            color: var(--secondary);
         }
         
-        .summary-value {
+        .summary-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
             font-size: 28px;
             font-weight: bold;
             color: var(--secondary);
             display: block;
-            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .shift-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .shift-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .shift-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .shift-label {
+            font-size: 14px;
+            color: #7f8c8d;
         }
         
         .plant-tabs {
@@ -293,6 +338,10 @@
             transition: all 0.3s ease;
             font-weight: 600;
             border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .plant-tab:hover {
@@ -305,43 +354,98 @@
             border-bottom-color: var(--primary);
         }
         
-        .date-range {
-            display: flex;
-            gap: 15px;
+        /* SINGLE ROW FORM STYLES */
+        .single-row-form {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1.5fr 1fr 1.5fr 1fr;
+            gap: 12px;
+            align-items: end;
         }
         
-        .date-range .form-group {
-            flex: 1;
+        .single-row-form .form-group {
+            margin-bottom: 0;
         }
         
-        .checkbox-group {
+        .date-range-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-group-row {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
-        .checkbox-group input {
+        .checkbox-group-row input {
             width: auto;
-            margin-right: 10px;
+            margin-right: 8px;
         }
         
         .hidden {
             display: none;
         }
         
-        .total-card {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, var(--primary), var(--dark));
-            color: white;
-            border-left: 5px solid var(--secondary);
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
-        .total-card h3, .total-card .summary-value {
-            color: white;
+        .filter-section .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .chart-card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chart-card h3 i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 1200px) {
+            .single-row-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .single-row-form button {
+                grid-column: 1 / -1;
+            }
         }
         
         @media (max-width: 768px) {
-            .summary-grid {
+            .summary-grid, .chart-container {
                 grid-template-columns: 1fr;
             }
             
@@ -353,11 +457,6 @@
                 margin: 0;
             }
             
-            .date-range {
-                flex-direction: column;
-                gap: 0;
-            }
-            
             .plant-tabs {
                 flex-wrap: wrap;
             }
@@ -365,13 +464,25 @@
             .plant-tab {
                 flex: 1 0 50%;
             }
+            
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .filter-section .form-group {
+                min-width: 100%;
+            }
+            
+            .single-row-form {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Concrete Pouring Schedule Monitoring</h1>
+            <h1><i class="fas fa-hard-hat"></i> Concrete Pouring Schedule Monitoring</h1>
             <p>Manage pouring schedules for Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, and Gianyar plants</p>
         </div>
     </header>
@@ -379,26 +490,110 @@
     <div class="container">
         <nav>
             <ul>
-                <li><a href="#" class="nav-link active" data-target="input-section">Schedule Input</a></li>
-                <li><a href="#" class="nav-link" data-target="monitoring-section">Monitoring</a></li>
-                <li><a href="#" class="nav-link" data-target="summary-section">Summary</a></li>
+                <li><a href="#" class="nav-link active" data-target="input-section">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Schedule Input</span>
+                </a></li>
+                <li><a href="#" class="nav-link" data-target="monitoring-section">
+                    <i class="fas fa-eye"></i>
+                    <span>Monitoring</span>
+                </a></li>
+                <li><a href="#" class="nav-link" data-target="summary-section">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Summary</span>
+                </a></li>
+                <li><a href="#" class="nav-link" data-target="chart-section">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Chart</span>
+                </a></li>
             </ul>
         </nav>
         
         <!-- Input Section -->
         <section id="input-section" class="content-section">
             <div class="card">
-                <h2>Schedule Concrete Pouring</h2>
+                <h2><i class="fas fa-pencil-alt"></i> Schedule Concrete Pouring</h2>
+                
+                <div class="checkbox-group-row">
+                    <input type="checkbox" id="daily-schedule">
+                    <label for="daily-schedule"><i class="fas fa-calendar-day"></i> Daily recurring project</label>
+                </div>
+                
                 <form id="schedule-form">
-                    <div class="form-group">
-                        <label for="project-name">Project Name</label>
-                        <input type="text" id="project-name" required>
+                    <div class="single-row-form">
+                        <div class="form-group">
+                            <label for="project-name"><i class="fas fa-project-diagram"></i> Project Name</label>
+                            <input type="text" id="project-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="plant"><i class="fas fa-industry"></i> Plant</label>
+                            <select id="plant" required>
+                                <option value="">Select Plant</option>
+                                <option value="Manukan">Manukan</option>
+                                <option value="Manyar">Manyar</option>
+                                <option value="Gempol">Gempol</option>
+                                <option value="Krian">Krian</option>
+                                <option value="Kediri">Kediri</option>
+                                <option value="Denpasar2">Denpasar2</option>
+                                <option value="Gianyar">Gianyar</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volume"><i class="fas fa-cube"></i> Volume (m³)</label>
+                            <input type="number" id="volume" min="0" step="0.01" required>
+                        </div>
+                        
+                        <div id="single-date" class="form-group">
+                            <label for="date"><i class="fas fa-calendar-alt"></i> Pouring Date</label>
+                            <input type="date" id="date">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="time"><i class="fas fa-clock"></i> Pouring Time</label>
+                            <input type="time" id="time" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes"><i class="fas fa-sticky-note"></i> Notes</label>
+                            <input type="text" id="notes" placeholder="Optional">
+                        </div>
+                        
+                        <button type="submit">
+                            <i class="fas fa-save"></i>
+                            Save
+                        </button>
                     </div>
                     
+                    <div id="date-range" class="date-range-row hidden">
+                        <div class="form-group">
+                            <label for="start-date"><i class="fas fa-play-circle"></i> From Date</label>
+                            <input type="date" id="start-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date"><i class="fas fa-stop-circle"></i> To Date</label>
+                            <input type="date" id="end-date">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Monitoring Section -->
+        <section id="monitoring-section" class="content-section hidden">
+            <div class="card">
+                <h2><i class="fas fa-eye"></i> Pouring Schedule Monitoring</h2>
+                
+                <div class="filter-section">
                     <div class="form-group">
-                        <label for="plant">Plant</label>
-                        <select id="plant" required>
-                            <option value="">Select Plant</option>
+                        <label for="filter-date"><i class="fas fa-calendar"></i> Filter by Date</label>
+                        <input type="date" id="filter-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-plant"><i class="fas fa-filter"></i> Filter by Plant</label>
+                        <select id="filter-plant">
+                            <option value="all">All Plants</option>
                             <option value="Manukan">Manukan</option>
                             <option value="Manyar">Manyar</option>
                             <option value="Gempol">Gempol</option>
@@ -408,62 +603,51 @@
                             <option value="Gianyar">Gianyar</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="volume">Volume (m³)</label>
-                        <input type="number" id="volume" min="0" step="0.01" required>
+                        <label for="filter-time"><i class="fas fa-clock"></i> Filter by Time Period</label>
+                        <select id="filter-time">
+                            <option value="all">All Times</option>
+                            <option value="morning">Morning (06:00 - 12:00)</option>
+                            <option value="afternoon">Afternoon (12:01 - 15:00)</option>
+                            <option value="evening">Evening (15:01 - 19:00)</option>
+                            <option value="night">Night (19:01 - 24:00)</option>
+                        </select>
                     </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="daily-schedule">
-                        <label for="daily-schedule">Daily recurring project</label>
-                    </div>
-                    
-                    <div id="single-date" class="form-group">
-                        <label for="date">Pouring Date</label>
-                        <input type="date" id="date">
-                    </div>
-                    
-                    <div id="date-range" class="date-range hidden">
-                        <div class="form-group">
-                            <label for="start-date">From Date</label>
-                            <input type="date" id="start-date">
-                        </div>
-                        <div class="form-group">
-                            <label for="end-date">To Date</label>
-                            <input type="date" id="end-date">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="time">Pouring Time</label>
-                        <input type="time" id="time" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="notes">Notes (Optional)</label>
-                        <textarea id="notes" rows="3"></textarea>
-                    </div>
-                    
-                    <button type="submit">Save Schedule</button>
-                </form>
-            </div>
-        </section>
-        
-        <!-- Monitoring Section -->
-        <section id="monitoring-section" class="content-section hidden">
-            <div class="card">
-                <h2>Pouring Schedule Monitoring</h2>
+                </div>
                 
                 <div class="plant-tabs">
-                    <div class="plant-tab active" data-plant="all">All Plants</div>
-                    <div class="plant-tab" data-plant="Manukan">Manukan</div>
-                    <div class="plant-tab" data-plant="Manyar">Manyar</div>
-                    <div class="plant-tab" data-plant="Gempol">Gempol</div>
-                    <div class="plant-tab" data-plant="Krian">Krian</div>
-                    <div class="plant-tab" data-plant="Kediri">Kediri</div>
-                    <div class="plant-tab" data-plant="Denpasar2">Denpasar2</div>
-                    <div class="plant-tab" data-plant="Gianyar">Gianyar</div>
+                    <div class="plant-tab active" data-plant="all">
+                        <i class="fas fa-building"></i>
+                        All Plants
+                    </div>
+                    <div class="plant-tab" data-plant="Manukan">
+                        <i class="fas fa-industry"></i>
+                        Manukan
+                    </div>
+                    <div class="plant-tab" data-plant="Manyar">
+                        <i class="fas fa-industry"></i>
+                        Manyar
+                    </div>
+                    <div class="plant-tab" data-plant="Gempol">
+                        <i class="fas fa-industry"></i>
+                        Gempol
+                    </div>
+                    <div class="plant-tab" data-plant="Krian">
+                        <i class="fas fa-industry"></i>
+                        Krian
+                    </div>
+                    <div class="plant-tab" data-plant="Kediri">
+                        <i class="fas fa-industry"></i>
+                        Kediri
+                    </div>
+                    <div class="plant-tab" data-plant="Denpasar2">
+                        <i class="fas fa-industry"></i>
+                        Denpasar2
+                    </div>
+                    <div class="plant-tab" data-plant="Gianyar">
+                        <i class="fas fa-industry"></i>
+                        Gianyar
+                    </div>
                 </div>
                 
                 <table id="schedule-table">
@@ -475,6 +659,7 @@
                             <th>Volume (m³)</th>
                             <th>Date</th>
                             <th>Time</th>
+                            <th>Time Period</th>
                             <th>Notes</th>
                             <th>Actions</th>
                         </tr>
@@ -489,15 +674,38 @@
         <!-- Summary Section -->
         <section id="summary-section" class="content-section hidden">
             <div class="card">
-                <h2>Pouring Summary</h2>
+                <h2><i class="fas fa-chart-bar"></i> Pouring Summary</h2>
                 
                 <div class="form-group">
-                    <label for="summary-date">Select Summary Date</label>
+                    <label for="summary-date"><i class="fas fa-calendar"></i> Select Summary Date</label>
                     <input type="date" id="summary-date">
                 </div>
                 
                 <div class="summary-grid" id="summary-container">
                     <!-- Summary will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Chart Section -->
+        <section id="chart-section" class="content-section hidden">
+            <div class="card">
+                <h2><i class="fas fa-chart-pie"></i> Pouring Charts</h2>
+                
+                <div class="form-group">
+                    <label for="chart-date"><i class="fas fa-calendar"></i> Select Chart Date</label>
+                    <input type="date" id="chart-date">
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-pie"></i> Volume by Plant</h3>
+                        <canvas id="plantVolumeChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3><i class="fas fa-chart-bar"></i> Volume by Shift</h3>
+                        <canvas id="shiftVolumeChart"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
@@ -515,15 +723,26 @@
         const plantTabs = document.querySelectorAll('.plant-tab');
         const summaryDate = document.getElementById('summary-date');
         const summaryContainer = document.getElementById('summary-container');
+        const chartDate = document.getElementById('chart-date');
         const dailyScheduleCheckbox = document.getElementById('daily-schedule');
         const singleDateDiv = document.getElementById('single-date');
         const dateRangeDiv = document.getElementById('date-range');
+        const filterDate = document.getElementById('filter-date');
+        const filterPlant = document.getElementById('filter-plant');
+        const filterTime = document.getElementById('filter-time');
+        
+        // Chart instances
+        let plantVolumeChart = null;
+        let shiftVolumeChart = null;
         
         // Set default date to today
-        document.getElementById('date').valueAsDate = new Date();
-        document.getElementById('start-date').valueAsDate = new Date();
-        document.getElementById('end-date').valueAsDate = new Date();
-        summaryDate.valueAsDate = new Date();
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').value = today;
+        document.getElementById('start-date').value = today;
+        document.getElementById('end-date').value = today;
+        summaryDate.value = today;
+        chartDate.value = today;
+        filterDate.value = today;
         
         // Toggle date range based on checkbox
         dailyScheduleCheckbox.addEventListener('change', function() {
@@ -557,6 +776,8 @@
                     renderScheduleTable();
                 } else if (target === 'summary-section') {
                     renderSummary();
+                } else if (target === 'chart-section') {
+                    renderCharts();
                 }
             });
         });
@@ -569,6 +790,15 @@
                 renderScheduleTable();
             });
         });
+        
+        // Filter event listeners
+        filterDate.addEventListener('change', renderScheduleTable);
+        filterPlant.addEventListener('change', renderScheduleTable);
+        filterTime.addEventListener('change', renderScheduleTable);
+        
+        // Date change listeners
+        summaryDate.addEventListener('change', renderSummary);
+        chartDate.addEventListener('change', renderCharts);
         
         // Form submission
         scheduleForm.addEventListener('submit', (e) => {
@@ -635,9 +865,9 @@
             scheduleForm.reset();
             
             // Reset date fields
-            document.getElementById('date').valueAsDate = new Date();
-            document.getElementById('start-date').valueAsDate = new Date();
-            document.getElementById('end-date').valueAsDate = new Date();
+            document.getElementById('date').value = today;
+            document.getElementById('start-date').value = today;
+            document.getElementById('end-date').value = today;
             dailyScheduleCheckbox.checked = false;
             singleDateDiv.classList.remove('hidden');
             dateRangeDiv.classList.add('hidden');
@@ -645,13 +875,57 @@
             alert(`Schedule saved successfully! ${newSchedules.length} entries added.`);
         });
         
+        // Get time period based on time
+        function getTimePeriod(time) {
+            const hour = parseInt(time.split(':')[0]);
+            
+            if (hour >= 6 && hour < 12) return 'morning';
+            if (hour >= 12 && hour < 15) return 'afternoon';
+            if (hour >= 15 && hour < 19) return 'evening';
+            return 'night';
+        }
+        
+        // Get time period label
+        function getTimePeriodLabel(period) {
+            switch(period) {
+                case 'morning': return 'Shift Pagi';
+                case 'afternoon': return 'Shift Siang';
+                case 'evening': return 'Shift Sore';
+                case 'night': return 'Shift Malam';
+                default: return 'Unknown';
+            }
+        }
+        
         // Render schedule table
         function renderScheduleTable() {
             const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
+            const filterDateValue = filterDate.value;
+            const filterPlantValue = filterPlant.value;
+            const filterTimeValue = filterTime.value;
             
             let filteredSchedules = schedules;
+            
+            // Apply plant filter
             if (activePlant !== 'all') {
-                filteredSchedules = schedules.filter(schedule => schedule.plant === activePlant);
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
+            }
+            
+            // Apply date filter
+            if (filterDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.date === filterDateValue);
+            }
+            
+            // Apply plant dropdown filter
+            if (filterPlantValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
+            }
+            
+            // Apply time period filter
+            if (filterTimeValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    return period === filterTimeValue;
+                });
             }
             
             // Sort by date and time
@@ -664,24 +938,30 @@
             scheduleBody.innerHTML = '';
             
             if (filteredSchedules.length === 0) {
-                scheduleBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No pouring schedules found</td></tr>';
+                scheduleBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No pouring schedules found</td></tr>';
                 return;
             }
             
             filteredSchedules.forEach((schedule, index) => {
                 const row = document.createElement('tr');
+                const timePeriod = getTimePeriod(schedule.time);
                 
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${schedule.projectName} ${schedule.isDaily ? '<span style="color: #e67e22; font-weight: bold;">(Daily)</span>' : ''}</td>
-                    <td>${schedule.plant}</td>
+                    <td><i class="fas fa-industry"></i> ${schedule.plant}</td>
                     <td>${schedule.volume}</td>
                     <td>${formatDate(schedule.date)}</td>
                     <td>${schedule.time}</td>
+                    <td>${getTimePeriodLabel(timePeriod)}</td>
                     <td>${schedule.notes || '-'}</td>
                     <td class="action-buttons">
-                        <button class="btn-edit" onclick="editSchedule(${schedule.id})">Edit</button>
-                        <button class="btn-delete" onclick="deleteSchedule(${schedule.id})">Delete</button>
+                        <button class="btn-edit" onclick="editSchedule(${schedule.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-delete" onclick="deleteSchedule(${schedule.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </td>
                 `;
                 
@@ -693,6 +973,7 @@
         function renderSummary() {
             const selectedDate = summaryDate.value;
             const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
+            const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
             
             summaryContainer.innerHTML = '';
             
@@ -704,33 +985,164 @@
                 const totalVolume = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
                 const projectCount = plantSchedules.length;
                 
-                const summaryCard = document.createElement('div');
-                summaryCard.className = 'summary-card';
+                // Calculate volume by shift
+                const shiftVolumes = {
+                    morning: 0,
+                    afternoon: 0,
+                    evening: 0,
+                    night: 0
+                };
                 
-                summaryCard.innerHTML = `
-                    <h3>${plant} Plant</h3>
-                    <p>Project Count: <span class="summary-value">${projectCount}</span></p>
-                    <p>Total Volume: <span class="summary-value">${totalVolume.toFixed(2)} m³</span></p>
+                plantSchedules.forEach(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    shiftVolumes[period] += schedule.volume;
+                });
+                
+                const plantCard = document.createElement('div');
+                plantCard.className = 'plant-summary-card';
+                
+                plantCard.innerHTML = `
+                    <h3>
+                        <span><i class="fas fa-industry"></i> ${plant} Plant</span>
+                    </h3>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">${projectCount}</span>
+                            <span class="stat-label">Project Count</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${totalVolume.toFixed(2)}</span>
+                            <span class="stat-label">Total Volume (m³)</span>
+                        </div>
+                    </div>
+                    <div class="shift-stats">
+                        <div class="shift-item">
+                            <span class="shift-value">${shiftVolumes.morning.toFixed(2)}</span>
+                            <span class="shift-label">Shift Pagi</span>
+                        </div>
+                        <div class="shift-item">
+                            <span class="shift-value">${shiftVolumes.afternoon.toFixed(2)}</span>
+                            <span class="shift-label">Shift Siang</span>
+                        </div>
+                        <div class="shift-item">
+                            <span class="shift-value">${shiftVolumes.evening.toFixed(2)}</span>
+                            <span class="shift-label">Shift Sore</span>
+                        </div>
+                        <div class="shift-item">
+                            <span class="shift-value">${shiftVolumes.night.toFixed(2)}</span>
+                            <span class="shift-label">Shift Malam</span>
+                        </div>
+                    </div>
                 `;
                 
-                summaryContainer.appendChild(summaryCard);
+                summaryContainer.appendChild(plantCard);
+            });
+        }
+        
+        // Render charts
+        function renderCharts() {
+            const selectedDate = chartDate.value;
+            const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
+            const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
+            
+            // Calculate data for charts
+            const plantVolumes = {};
+            const shiftVolumes = {
+                morning: 0,
+                afternoon: 0,
+                evening: 0,
+                night: 0
+            };
+            
+            plants.forEach(plant => {
+                const plantSchedules = schedules.filter(schedule => 
+                    schedule.plant === plant && schedule.date === selectedDate
+                );
+                
+                plantVolumes[plant] = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
+                
+                plantSchedules.forEach(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    shiftVolumes[period] += schedule.volume;
+                });
             });
             
-            // Add total summary
-            const totalSchedules = schedules.filter(schedule => schedule.date === selectedDate);
-            const totalVolume = totalSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
-            const totalProjectCount = totalSchedules.length;
+            // Destroy existing charts if they exist
+            if (plantVolumeChart) {
+                plantVolumeChart.destroy();
+            }
+            if (shiftVolumeChart) {
+                shiftVolumeChart.destroy();
+            }
             
-            const totalCard = document.createElement('div');
-            totalCard.className = 'summary-card total-card';
+            // Plant Volume Chart
+            const plantCtx = document.getElementById('plantVolumeChart').getContext('2d');
+            plantVolumeChart = new Chart(plantCtx, {
+                type: 'pie',
+                data: {
+                    labels: plants,
+                    datasets: [{
+                        data: plants.map(plant => plantVolumes[plant]),
+                        backgroundColor: [
+                            '#3498db', '#2ecc71', '#e74c3c', '#f39c12',
+                            '#9b59b6', '#1abc9c', '#34495e'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Volume Distribution by Plant'
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
             
-            totalCard.innerHTML = `
-                <h3>All Plants Total</h3>
-                <p>Project Count: <span class="summary-value">${totalProjectCount}</span></p>
-                <p>Total Volume: <span class="summary-value">${totalVolume.toFixed(2)} m³</span></p>
-            `;
-            
-            summaryContainer.appendChild(totalCard);
+            // Shift Volume Chart
+            const shiftCtx = document.getElementById('shiftVolumeChart').getContext('2d');
+            shiftVolumeChart = new Chart(shiftCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Shift Pagi', 'Shift Siang', 'Shift Sore', 'Shift Malam'],
+                    datasets: [{
+                        label: 'Volume (m³)',
+                        data: [
+                            shiftVolumes.morning,
+                            shiftVolumes.afternoon,
+                            shiftVolumes.evening,
+                            shiftVolumes.night
+                        ],
+                        backgroundColor: [
+                            '#3498db', '#2ecc71', '#e74c3c', '#f39c12'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Volume Distribution by Shift'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (m³)'
+                            }
+                        }
+                    }
+                }
+            });
         }
         
         // Edit schedule
@@ -745,12 +1157,11 @@
             document.getElementById('notes').value = schedule.notes || '';
             
             if (schedule.isDaily) {
-                // For daily schedules, we'll just edit the single instance
-                // In a more advanced version, we might want to edit the entire series
-                dailyScheduleCheckbox.checked = false;
-                singleDateDiv.classList.remove('hidden');
-                dateRangeDiv.classList.add('hidden');
-                document.getElementById('date').value = schedule.date;
+                dailyScheduleCheckbox.checked = true;
+                singleDateDiv.classList.add('hidden');
+                dateRangeDiv.classList.remove('hidden');
+                document.getElementById('start-date').value = schedule.date;
+                document.getElementById('end-date').value = schedule.date;
             } else {
                 dailyScheduleCheckbox.checked = false;
                 singleDateDiv.classList.remove('hidden');
@@ -791,12 +1202,10 @@
             });
         }
         
-        // Event listeners
-        summaryDate.addEventListener('change', renderSummary);
-        
         // Initial render
         renderScheduleTable();
         renderSummary();
+        renderCharts();
     </script>
 </body>
 </html>
