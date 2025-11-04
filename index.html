@@ -32,12 +32,11 @@
             line-height: 1.6;
             display: flex;
             min-height: 100vh;
-            transition: margin-left 0.3s ease;
         }
         
         .container {
             flex: 1;
-            max-width: 100%;
+            width: 100%;
             padding: 20px;
             margin-left: var(--sidebar-collapsed-width);
             transition: margin-left 0.3s ease;
@@ -60,10 +59,11 @@
         .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
+            align-items: flex-start;
+            max-width: 100%;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
         }
         
         .header-text {
@@ -83,7 +83,9 @@
         }
         
         .datetime {
-            text-align: right;
+            position: absolute;
+            top: 0;
+            right: 20px;
             font-size: 1rem;
             font-weight: 600;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -311,6 +313,7 @@
             padding: 20px;
             margin-bottom: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
         }
         
         .card:hover {
@@ -653,17 +656,24 @@
             gap: 15px;
             margin-bottom: 20px;
             flex-wrap: wrap;
+            align-items: end;
         }
         
         .filter-section .form-group {
             flex: 1;
             min-width: 200px;
+            margin-bottom: 0;
         }
         
         .date-range-filter {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
             gap: 10px;
+            align-items: end;
+        }
+        
+        .date-range-filter .form-group {
+            flex: 1;
+            margin-bottom: 0;
         }
         
         .chart-container {
@@ -718,6 +728,7 @@
         @media (max-width: 768px) {
             .container {
                 margin-left: 0;
+                padding: 15px;
             }
             
             .container.expanded {
@@ -743,8 +754,10 @@
             }
             
             .datetime {
+                position: relative;
                 text-align: center;
                 margin-top: 10px;
+                right: 0;
             }
             
             .summary-grid, .chart-container {
@@ -951,11 +964,11 @@
                     <div class="form-group">
                         <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
                         <div class="date-range-filter">
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
                                 <input type="date" id="filter-start-date">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
                                 <input type="date" id="filter-end-date">
                             </div>
@@ -1051,11 +1064,11 @@
                     <div class="form-group">
                         <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
                         <div class="date-range-filter">
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
                                 <input type="date" id="summary-start-date">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
                                 <input type="date" id="summary-end-date">
                             </div>
@@ -1078,11 +1091,11 @@
                     <div class="form-group">
                         <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
                         <div class="date-range-filter">
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
                                 <input type="date" id="chart-start-date">
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
                                 <input type="date" id="chart-end-date">
                             </div>
