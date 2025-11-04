@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Monitoring Jadwal Pengecoran</title>
+    <title>Concrete Pouring Schedule Monitoring</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -371,15 +371,15 @@
 <body>
     <header>
         <div class="container">
-            <h1>Aplikasi Monitoring Jadwal Pengecoran</h1>
-            <p>Manajemen jadwal pengecoran untuk plant Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, dan Gianyar</p>
+            <h1>Concrete Pouring Schedule Monitoring</h1>
+            <p>Manage pouring schedules for Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, and Gianyar plants</p>
         </div>
     </header>
     
     <div class="container">
         <nav>
             <ul>
-                <li><a href="#" class="nav-link active" data-target="input-section">Input Jadwal</a></li>
+                <li><a href="#" class="nav-link active" data-target="input-section">Schedule Input</a></li>
                 <li><a href="#" class="nav-link" data-target="monitoring-section">Monitoring</a></li>
                 <li><a href="#" class="nav-link" data-target="summary-section">Summary</a></li>
             </ul>
@@ -388,17 +388,17 @@
         <!-- Input Section -->
         <section id="input-section" class="content-section">
             <div class="card">
-                <h2>Input Jadwal Pengecoran</h2>
+                <h2>Schedule Concrete Pouring</h2>
                 <form id="schedule-form">
                     <div class="form-group">
-                        <label for="project-name">Nama Project</label>
+                        <label for="project-name">Project Name</label>
                         <input type="text" id="project-name" required>
                     </div>
                     
                     <div class="form-group">
                         <label for="plant">Plant</label>
                         <select id="plant" required>
-                            <option value="">Pilih Plant</option>
+                            <option value="">Select Plant</option>
                             <option value="Manukan">Manukan</option>
                             <option value="Manyar">Manyar</option>
                             <option value="Gempol">Gempol</option>
@@ -416,36 +416,36 @@
                     
                     <div class="checkbox-group">
                         <input type="checkbox" id="daily-schedule">
-                        <label for="daily-schedule">Project berlangsung setiap hari</label>
+                        <label for="daily-schedule">Daily recurring project</label>
                     </div>
                     
                     <div id="single-date" class="form-group">
-                        <label for="date">Tanggal Pengecoran</label>
+                        <label for="date">Pouring Date</label>
                         <input type="date" id="date">
                     </div>
                     
                     <div id="date-range" class="date-range hidden">
                         <div class="form-group">
-                            <label for="start-date">Dari Tanggal</label>
+                            <label for="start-date">From Date</label>
                             <input type="date" id="start-date">
                         </div>
                         <div class="form-group">
-                            <label for="end-date">Sampai Tanggal</label>
+                            <label for="end-date">To Date</label>
                             <input type="date" id="end-date">
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="time">Waktu Pengecoran</label>
+                        <label for="time">Pouring Time</label>
                         <input type="time" id="time" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="notes">Catatan (Opsional)</label>
+                        <label for="notes">Notes (Optional)</label>
                         <textarea id="notes" rows="3"></textarea>
                     </div>
                     
-                    <button type="submit">Simpan Jadwal</button>
+                    <button type="submit">Save Schedule</button>
                 </form>
             </div>
         </section>
@@ -453,10 +453,10 @@
         <!-- Monitoring Section -->
         <section id="monitoring-section" class="content-section hidden">
             <div class="card">
-                <h2>Monitoring Jadwal Pengecoran</h2>
+                <h2>Pouring Schedule Monitoring</h2>
                 
                 <div class="plant-tabs">
-                    <div class="plant-tab active" data-plant="all">Semua Plant</div>
+                    <div class="plant-tab active" data-plant="all">All Plants</div>
                     <div class="plant-tab" data-plant="Manukan">Manukan</div>
                     <div class="plant-tab" data-plant="Manyar">Manyar</div>
                     <div class="plant-tab" data-plant="Gempol">Gempol</div>
@@ -470,17 +470,17 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Project</th>
+                            <th>Project Name</th>
                             <th>Plant</th>
                             <th>Volume (m³)</th>
-                            <th>Tanggal</th>
-                            <th>Waktu</th>
-                            <th>Catatan</th>
-                            <th>Aksi</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="schedule-body">
-                        <!-- Data akan diisi oleh JavaScript -->
+                        <!-- Data will be populated by JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -489,22 +489,22 @@
         <!-- Summary Section -->
         <section id="summary-section" class="content-section hidden">
             <div class="card">
-                <h2>Summary Pengecoran</h2>
+                <h2>Pouring Summary</h2>
                 
                 <div class="form-group">
-                    <label for="summary-date">Pilih Tanggal Summary</label>
+                    <label for="summary-date">Select Summary Date</label>
                     <input type="date" id="summary-date">
                 </div>
                 
                 <div class="summary-grid" id="summary-container">
-                    <!-- Summary akan diisi oleh JavaScript -->
+                    <!-- Summary will be populated by JavaScript -->
                 </div>
             </div>
         </section>
     </div>
 
     <script>
-        // Data jadwal pengecoran
+        // Concrete pouring schedule data
         let schedules = JSON.parse(localStorage.getItem('schedules')) || [];
         
         // DOM Elements
@@ -590,7 +590,7 @@
                 
                 // Validate date range
                 if (startDate > endDate) {
-                    alert('Tanggal mulai tidak boleh setelah tanggal akhir!');
+                    alert('Start date cannot be after end date!');
                     return;
                 }
                 
@@ -642,7 +642,7 @@
             singleDateDiv.classList.remove('hidden');
             dateRangeDiv.classList.add('hidden');
             
-            alert(`Jadwal berhasil disimpan! ${newSchedules.length} entri ditambahkan.`);
+            alert(`Schedule saved successfully! ${newSchedules.length} entries added.`);
         });
         
         // Render schedule table
@@ -664,7 +664,7 @@
             scheduleBody.innerHTML = '';
             
             if (filteredSchedules.length === 0) {
-                scheduleBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Tidak ada jadwal pengecoran</td></tr>';
+                scheduleBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No pouring schedules found</td></tr>';
                 return;
             }
             
@@ -673,7 +673,7 @@
                 
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${schedule.projectName} ${schedule.isDaily ? '<span style="color: #e67e22; font-weight: bold;">(Setiap Hari)</span>' : ''}</td>
+                    <td>${schedule.projectName} ${schedule.isDaily ? '<span style="color: #e67e22; font-weight: bold;">(Daily)</span>' : ''}</td>
                     <td>${schedule.plant}</td>
                     <td>${schedule.volume}</td>
                     <td>${formatDate(schedule.date)}</td>
@@ -681,7 +681,7 @@
                     <td>${schedule.notes || '-'}</td>
                     <td class="action-buttons">
                         <button class="btn-edit" onclick="editSchedule(${schedule.id})">Edit</button>
-                        <button class="btn-delete" onclick="deleteSchedule(${schedule.id})">Hapus</button>
+                        <button class="btn-delete" onclick="deleteSchedule(${schedule.id})">Delete</button>
                     </td>
                 `;
                 
@@ -708,8 +708,8 @@
                 summaryCard.className = 'summary-card';
                 
                 summaryCard.innerHTML = `
-                    <h3>Plant ${plant}</h3>
-                    <p>Jumlah Project: <span class="summary-value">${projectCount}</span></p>
+                    <h3>${plant} Plant</h3>
+                    <p>Project Count: <span class="summary-value">${projectCount}</span></p>
                     <p>Total Volume: <span class="summary-value">${totalVolume.toFixed(2)} m³</span></p>
                 `;
                 
@@ -725,8 +725,8 @@
             totalCard.className = 'summary-card total-card';
             
             totalCard.innerHTML = `
-                <h3>Total Semua Plant</h3>
-                <p>Jumlah Project: <span class="summary-value">${totalProjectCount}</span></p>
+                <h3>All Plants Total</h3>
+                <p>Project Count: <span class="summary-value">${totalProjectCount}</span></p>
                 <p>Total Volume: <span class="summary-value">${totalVolume.toFixed(2)} m³</span></p>
             `;
             
@@ -767,7 +767,7 @@
         
         // Delete schedule
         function deleteSchedule(id, confirmDelete = true) {
-            if (confirmDelete && !confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+            if (confirmDelete && !confirm('Are you sure you want to delete this schedule?')) {
                 return;
             }
             
@@ -781,10 +781,10 @@
             localStorage.setItem('schedules', JSON.stringify(schedules));
         }
         
-        // Format date to Indonesian format
+        // Format date to standard format
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', {
+            return date.toLocaleDateString('en-US', {
                 day: '2-digit',
                 month: '2-digit',
                 year: 'numeric'
