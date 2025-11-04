@@ -222,20 +222,45 @@
             background-color: #f9f9f9;
         }
         
-        .action-buttons button {
-            padding: 8px 15px;
-            margin-right: 8px;
-            font-size: 14px;
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
         }
         
         .btn-edit {
-            background: linear-gradient(to right, var(--warning), #e67e22);
-            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #e67e22;
         }
         
         .btn-delete {
-            background: linear-gradient(to right, var(--danger), #c0392b);
-            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background-color: #c0392b;
         }
         
         .summary-grid {
@@ -955,13 +980,15 @@
                     <td>${schedule.time}</td>
                     <td>${getTimePeriodLabel(timePeriod)}</td>
                     <td>${schedule.notes || '-'}</td>
-                    <td class="action-buttons">
-                        <button class="btn-edit" onclick="editSchedule(${schedule.id})">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn-delete" onclick="deleteSchedule(${schedule.id})">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn btn-edit" onclick="editSchedule(${schedule.id})" title="Edit Schedule">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn btn-delete" onclick="deleteSchedule(${schedule.id})" title="Delete Schedule">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 
