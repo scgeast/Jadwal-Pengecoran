@@ -48,20 +48,18 @@
         }
         
         header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 15px 0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-bottom: 3px solid var(--secondary);
             margin-bottom: 20px;
             position: relative;
-            text-align: center;
         }
         
         .header-content {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
@@ -70,7 +68,6 @@
         
         .header-text {
             flex: 1;
-            text-align: center;
         }
         
         header h1 {
@@ -86,7 +83,7 @@
         }
         
         .datetime {
-            text-align: center;
+            text-align: right;
             font-size: 1rem;
             font-weight: 600;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -94,7 +91,6 @@
             padding: 8px 15px;
             border-radius: 20px;
             backdrop-filter: blur(5px);
-            margin-top: 10px;
         }
         
         /* Sidebar Styles */
@@ -275,16 +271,17 @@
             align-items: center;
             color: var(--dark);
             text-decoration: none;
-            padding: 12px 10px;
+            padding: 10px 8px;
             font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            font-size: 0.85rem;
         }
         
         nav ul li a i {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
         }
         
         nav ul li a:hover {
@@ -593,7 +590,7 @@
         }
         
         .plant-tab {
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             flex: 1;
             text-align: center;
@@ -603,8 +600,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 6px;
+            font-size: 0.85rem;
         }
         
         .plant-tab:hover {
@@ -849,7 +846,7 @@
                     <h1><i class="fas fa-hard-hat"></i> Concrete Pouring Schedule Monitoring</h1>
                     <p>Manage pouring schedules for Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, and Gianyar plants</p>
                 </div>
-                <div class="datetime" id="current-date">Loading...</div>
+                <div class="datetime" id="current-date">04/11/2025</div>
             </div>
         </header>
         
