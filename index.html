@@ -15,6 +15,8 @@
             --danger: #e74c3c;
             --light: #ecf0f1;
             --dark: #34495e;
+            --sidebar-width: 300px;
+            --sidebar-collapsed-width: 70px;
         }
         
         * {
@@ -28,33 +30,213 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            flex: 1;
+            max-width: 100%;
             padding: 20px;
+            margin-left: var(--sidebar-collapsed-width);
+            transition: margin-left 0.3s ease;
+        }
+        
+        .container.expanded {
+            margin-left: var(--sidebar-width);
         }
         
         header {
             background: linear-gradient(135deg, var(--primary), #1a2530);
             color: white;
-            padding: 25px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-bottom: 4px solid var(--secondary);
+            padding: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--secondary);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-text {
+            flex: 1;
         }
         
         header h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 2.2rem;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
         }
         
         header p {
-            text-align: center;
             opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
+            font-size: 0.9rem;
+        }
+        
+        .datetime {
+            text-align: right;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .datetime .date {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .datetime .time {
+            font-size: 0.85rem;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--primary), #1a2530);
+            color: white;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+        
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-header h3 {
+            font-size: 1.2rem;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar.collapsed .sidebar-header h3 {
+            opacity: 0;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .toggle-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-content {
+            padding: 15px;
+            height: calc(100% - 70px);
+            overflow-y: auto;
+        }
+        
+        .target-section {
+            margin-bottom: 25px;
+        }
+        
+        .target-section h4 {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: var(--secondary);
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar.collapsed .target-section h4 {
+            opacity: 0;
+        }
+        
+        .target-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .target-item i {
+            color: var(--secondary);
+            font-size: 1rem;
+            min-width: 20px;
+        }
+        
+        .target-item label {
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            flex: 1;
+        }
+        
+        .sidebar.collapsed .target-item label {
+            opacity: 0;
+        }
+        
+        .target-input {
+            width: 80px;
+            padding: 6px 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 0.85rem;
+        }
+        
+        .target-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .save-targets {
+            width: 100%;
+            padding: 8px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.3s;
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar.collapsed .save-targets {
+            opacity: 0;
+        }
+        
+        .save-targets:hover {
+            background: #2980b9;
         }
         
         nav {
@@ -84,7 +266,7 @@
             align-items: center;
             color: var(--dark);
             text-decoration: none;
-            padding: 18px 10px;
+            padding: 15px 10px;
             font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
@@ -92,8 +274,8 @@
         }
         
         nav ul li a i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
         }
         
         nav ul li a:hover {
@@ -112,7 +294,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 4px;
+            height: 3px;
             background-color: var(--primary);
         }
         
@@ -120,8 +302,8 @@
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
@@ -132,16 +314,16 @@
         
         h2 {
             color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
             border-bottom: 2px solid #f0f0f0;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             display: flex;
             align-items: center;
         }
         
         h2 i {
-            margin-right: 12px;
+            margin-right: 10px;
             color: var(--secondary);
         }
         
@@ -176,10 +358,10 @@
             background: linear-gradient(to right, var(--secondary), #2980b9);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
@@ -204,7 +386,7 @@
         }
         
         table th, table td {
-            padding: 15px;
+            padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
@@ -214,7 +396,7 @@
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 0.5px;
         }
         
@@ -229,8 +411,8 @@
         }
         
         .action-btn {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -238,7 +420,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 14px;
         }
         
         .action-btn:hover {
@@ -266,17 +448,18 @@
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 25px;
+            gap: 20px;
+            margin-top: 20px;
         }
         
         .plant-summary-card {
             background: linear-gradient(135deg, #fff, #f8f9fa);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 20px;
+            padding: 18px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-left: 5px solid var(--secondary);
+            position: relative;
         }
         
         .plant-summary-card:hover {
@@ -286,8 +469,8 @@
         
         .plant-summary-card h3 {
             color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -297,10 +480,55 @@
             color: var(--secondary);
         }
         
+        .target-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .progress-container {
+            margin-bottom: 15px;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-fill.warning {
+            background: var(--warning);
+        }
+        
+        .progress-fill.danger {
+            background: var(--danger);
+        }
+        
         .summary-stats {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .stat-item {
@@ -309,32 +537,32 @@
         }
         
         .stat-value {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--secondary);
             display: block;
         }
         
         .stat-label {
-            font-size: 14px;
+            font-size: 0.85rem;
             color: #7f8c8d;
         }
         
         .shift-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
         }
         
         .shift-item {
             background: #f8f9fa;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             text-align: center;
         }
         
         .shift-value {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: var(--dark);
             display: block;
@@ -342,13 +570,13 @@
         }
         
         .shift-label {
-            font-size: 14px;
+            font-size: 0.85rem;
             color: #7f8c8d;
         }
         
         .plant-tabs {
             display: flex;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -356,7 +584,7 @@
         }
         
         .plant-tab {
-            padding: 15px 20px;
+            padding: 12px 15px;
             cursor: pointer;
             flex: 1;
             text-align: center;
@@ -367,6 +595,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: 0.9rem;
         }
         
         .plant-tab:hover {
@@ -383,7 +612,7 @@
         .single-row-form {
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1.5fr 1fr 1.5fr 1fr;
-            gap: 12px;
+            gap: 10px;
             align-items: end;
         }
         
@@ -394,7 +623,7 @@
         .date-range-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             margin-top: 10px;
         }
         
@@ -425,18 +654,24 @@
             min-width: 200px;
         }
         
-        .chart-container {
+        .date-range-filter {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 25px;
+            gap: 10px;
+        }
+        
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
         }
         
         .chart-card {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 25px;
+            padding: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
@@ -447,8 +682,8 @@
         
         .chart-card h3 {
             color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
         }
@@ -456,6 +691,11 @@
         .chart-card h3 i {
             margin-right: 10px;
             color: var(--secondary);
+        }
+        
+        .chart-wrapper {
+            height: 300px;
+            position: relative;
         }
         
         @media (max-width: 1200px) {
@@ -470,6 +710,37 @@
         }
         
         @media (max-width: 768px) {
+            .container {
+                margin-left: 0;
+            }
+            
+            .container.expanded {
+                margin-left: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+                width: var(--sidebar-width);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .datetime {
+                text-align: center;
+                margin-top: 10px;
+            }
+            
             .summary-grid, .chart-container {
                 grid-template-columns: 1fr;
             }
@@ -501,18 +772,81 @@
             .single-row-form {
                 grid-template-columns: 1fr;
             }
+            
+            .date-range-filter {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1><i class="fas fa-hard-hat"></i> Concrete Pouring Schedule Monitoring</h1>
-            <p>Manage pouring schedules for Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, and Gianyar plants</p>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-bullseye"></i> Daily Targets</h3>
+            <button class="toggle-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
         </div>
-    </header>
-    
+        <div class="sidebar-content">
+            <div class="target-section">
+                <h4>Set Daily Volume Targets (m³)</h4>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Manukan</label>
+                    <input type="number" class="target-input" id="target-manukan" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Manyar</label>
+                    <input type="number" class="target-input" id="target-manyar" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Gempol</label>
+                    <input type="number" class="target-input" id="target-gempol" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Krian</label>
+                    <input type="number" class="target-input" id="target-krian" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Kediri</label>
+                    <input type="number" class="target-input" id="target-kediri" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Denpasar2</label>
+                    <input type="number" class="target-input" id="target-denpasar2" min="0" step="0.1">
+                </div>
+                <div class="target-item">
+                    <i class="fas fa-industry"></i>
+                    <label>Gianyar</label>
+                    <input type="number" class="target-input" id="target-gianyar" min="0" step="0.1">
+                </div>
+                <button class="save-targets" id="save-targets">
+                    <i class="fas fa-save"></i> Save Targets
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1><i class="fas fa-hard-hat"></i> Concrete Pouring Schedule Monitoring</h1>
+                    <p>Manage pouring schedules for Manukan, Manyar, Gempol, Krian, Kediri, Denpasar2, and Gianyar plants</p>
+                </div>
+                <div class="datetime">
+                    <div class="date" id="current-date">Loading...</div>
+                    <div class="time" id="current-time">Loading...</div>
+                </div>
+            </div>
+        </header>
+        
         <nav>
             <ul>
                 <li><a href="#" class="nav-link active" data-target="input-section">
@@ -612,8 +946,17 @@
                 
                 <div class="filter-section">
                     <div class="form-group">
-                        <label for="filter-date"><i class="fas fa-calendar"></i> Filter by Date</label>
-                        <input type="date" id="filter-date">
+                        <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
+                        <div class="date-range-filter">
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
+                                <input type="date" id="filter-start-date">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
+                                <input type="date" id="filter-end-date">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="filter-plant"><i class="fas fa-filter"></i> Filter by Plant</label>
@@ -701,9 +1044,20 @@
             <div class="card">
                 <h2><i class="fas fa-chart-bar"></i> Pouring Summary</h2>
                 
-                <div class="form-group">
-                    <label for="summary-date"><i class="fas fa-calendar"></i> Select Summary Date</label>
-                    <input type="date" id="summary-date">
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
+                        <div class="date-range-filter">
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
+                                <input type="date" id="summary-start-date">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
+                                <input type="date" id="summary-end-date">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="summary-grid" id="summary-container">
@@ -717,19 +1071,34 @@
             <div class="card">
                 <h2><i class="fas fa-chart-pie"></i> Pouring Charts</h2>
                 
-                <div class="form-group">
-                    <label for="chart-date"><i class="fas fa-calendar"></i> Select Chart Date</label>
-                    <input type="date" id="chart-date">
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
+                        <div class="date-range-filter">
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
+                                <input type="date" id="chart-start-date">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
+                                <input type="date" id="chart-end-date">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="chart-container">
                     <div class="chart-card">
-                        <h3><i class="fas fa-chart-pie"></i> Volume by Plant</h3>
-                        <canvas id="plantVolumeChart"></canvas>
+                        <h3><i class="fas fa-chart-bar"></i> Volume by Plant</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="plantVolumeChart"></canvas>
+                        </div>
                     </div>
                     <div class="chart-card">
                         <h3><i class="fas fa-chart-bar"></i> Volume by Shift</h3>
-                        <canvas id="shiftVolumeChart"></canvas>
+                        <div class="chart-wrapper">
+                            <canvas id="shiftVolumeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -739,6 +1108,15 @@
     <script>
         // Concrete pouring schedule data
         let schedules = JSON.parse(localStorage.getItem('schedules')) || [];
+        let dailyTargets = JSON.parse(localStorage.getItem('dailyTargets')) || {
+            Manukan: 100,
+            Manyar: 80,
+            Gempol: 90,
+            Krian: 70,
+            Kediri: 85,
+            Denpasar2: 75,
+            Gianyar: 95
+        };
         
         // DOM Elements
         const navLinks = document.querySelectorAll('.nav-link');
@@ -746,15 +1124,24 @@
         const scheduleForm = document.getElementById('schedule-form');
         const scheduleBody = document.getElementById('schedule-body');
         const plantTabs = document.querySelectorAll('.plant-tab');
-        const summaryDate = document.getElementById('summary-date');
         const summaryContainer = document.getElementById('summary-container');
-        const chartDate = document.getElementById('chart-date');
         const dailyScheduleCheckbox = document.getElementById('daily-schedule');
         const singleDateDiv = document.getElementById('single-date');
         const dateRangeDiv = document.getElementById('date-range');
-        const filterDate = document.getElementById('filter-date');
+        const filterStartDate = document.getElementById('filter-start-date');
+        const filterEndDate = document.getElementById('filter-end-date');
         const filterPlant = document.getElementById('filter-plant');
         const filterTime = document.getElementById('filter-time');
+        const summaryStartDate = document.getElementById('summary-start-date');
+        const summaryEndDate = document.getElementById('summary-end-date');
+        const chartStartDate = document.getElementById('chart-start-date');
+        const chartEndDate = document.getElementById('chart-end-date');
+        const sidebar = document.querySelector('.sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
+        const container = document.querySelector('.container');
+        const saveTargetsBtn = document.getElementById('save-targets');
+        const currentDateElement = document.getElementById('current-date');
+        const currentTimeElement = document.getElementById('current-time');
         
         // Chart instances
         let plantVolumeChart = null;
@@ -765,9 +1152,70 @@
         document.getElementById('date').value = today;
         document.getElementById('start-date').value = today;
         document.getElementById('end-date').value = today;
-        summaryDate.value = today;
-        chartDate.value = today;
-        filterDate.value = today;
+        filterStartDate.value = today;
+        filterEndDate.value = today;
+        summaryStartDate.value = today;
+        summaryEndDate.value = today;
+        chartStartDate.value = today;
+        chartEndDate.value = today;
+        
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            
+            currentDateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
+            currentTimeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
+        
+        // Update date and time every second
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Initial call
+        
+        // Load daily targets
+        function loadDailyTargets() {
+            document.getElementById('target-manukan').value = dailyTargets.Manukan;
+            document.getElementById('target-manyar').value = dailyTargets.Manyar;
+            document.getElementById('target-gempol').value = dailyTargets.Gempol;
+            document.getElementById('target-krian').value = dailyTargets.Krian;
+            document.getElementById('target-kediri').value = dailyTargets.Kediri;
+            document.getElementById('target-denpasar2').value = dailyTargets.Denpasar2;
+            document.getElementById('target-gianyar').value = dailyTargets.Gianyar;
+        }
+        
+        // Save daily targets
+        function saveDailyTargets() {
+            dailyTargets = {
+                Manukan: parseFloat(document.getElementById('target-manukan').value) || 0,
+                Manyar: parseFloat(document.getElementById('target-manyar').value) || 0,
+                Gempol: parseFloat(document.getElementById('target-gempol').value) || 0,
+                Krian: parseFloat(document.getElementById('target-krian').value) || 0,
+                Kediri: parseFloat(document.getElementById('target-kediri').value) || 0,
+                Denpasar2: parseFloat(document.getElementById('target-denpasar2').value) || 0,
+                Gianyar: parseFloat(document.getElementById('target-gianyar').value) || 0
+            };
+            localStorage.setItem('dailyTargets', JSON.stringify(dailyTargets));
+            alert('Daily targets saved successfully!');
+            renderSummary();
+        }
+        
+        // Toggle sidebar
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            container.classList.toggle('expanded');
+            
+            // Change icon based on state
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.className = 'fas fa-chevron-right';
+            } else {
+                icon.className = 'fas fa-chevron-left';
+            }
+        });
+        
+        // Save targets button
+        saveTargetsBtn.addEventListener('click', saveDailyTargets);
         
         // Toggle date range based on checkbox
         dailyScheduleCheckbox.addEventListener('change', function() {
@@ -817,13 +1265,18 @@
         });
         
         // Filter event listeners
-        filterDate.addEventListener('change', renderScheduleTable);
+        filterStartDate.addEventListener('change', renderScheduleTable);
+        filterEndDate.addEventListener('change', renderScheduleTable);
         filterPlant.addEventListener('change', renderScheduleTable);
         filterTime.addEventListener('change', renderScheduleTable);
         
-        // Date change listeners
-        summaryDate.addEventListener('change', renderSummary);
-        chartDate.addEventListener('change', renderCharts);
+        // Summary date range listeners
+        summaryStartDate.addEventListener('change', renderSummary);
+        summaryEndDate.addEventListener('change', renderSummary);
+        
+        // Chart date range listeners
+        chartStartDate.addEventListener('change', renderCharts);
+        chartEndDate.addEventListener('change', renderCharts);
         
         // Form submission
         scheduleForm.addEventListener('submit', (e) => {
@@ -924,7 +1377,8 @@
         // Render schedule table
         function renderScheduleTable() {
             const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
-            const filterDateValue = filterDate.value;
+            const filterStartDateValue = filterStartDate.value;
+            const filterEndDateValue = filterEndDate.value;
             const filterPlantValue = filterPlant.value;
             const filterTimeValue = filterTime.value;
             
@@ -935,9 +1389,14 @@
                 filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
             }
             
-            // Apply date filter
-            if (filterDateValue) {
-                filteredSchedules = filteredSchedules.filter(schedule => schedule.date === filterDateValue);
+            // Apply date range filter
+            if (filterStartDateValue && filterEndDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.date);
+                    const startDate = new Date(filterStartDateValue);
+                    const endDate = new Date(filterEndDateValue);
+                    return scheduleDate >= startDate && scheduleDate <= endDate;
+                });
             }
             
             // Apply plant dropdown filter
@@ -998,19 +1457,30 @@
         
         // Render summary
         function renderSummary() {
-            const selectedDate = summaryDate.value;
+            const startDateValue = summaryStartDate.value;
+            const endDateValue = summaryEndDate.value;
             const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
             const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
             
             summaryContainer.innerHTML = '';
             
             plants.forEach(plant => {
-                const plantSchedules = schedules.filter(schedule => 
-                    schedule.plant === plant && schedule.date === selectedDate
-                );
+                let plantSchedules = schedules.filter(schedule => schedule.plant === plant);
+                
+                // Apply date range filter
+                if (startDateValue && endDateValue) {
+                    plantSchedules = plantSchedules.filter(schedule => {
+                        const scheduleDate = new Date(schedule.date);
+                        const startDate = new Date(startDateValue);
+                        const endDate = new Date(endDateValue);
+                        return scheduleDate >= startDate && scheduleDate <= endDate;
+                    });
+                }
                 
                 const totalVolume = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
                 const projectCount = plantSchedules.length;
+                const targetVolume = dailyTargets[plant] || 0;
+                const progressPercentage = targetVolume > 0 ? Math.min((totalVolume / targetVolume) * 100, 100) : 0;
                 
                 // Calculate volume by shift
                 const shiftVolumes = {
@@ -1028,10 +1498,30 @@
                 const plantCard = document.createElement('div');
                 plantCard.className = 'plant-summary-card';
                 
+                // Determine progress bar color
+                let progressClass = '';
+                if (progressPercentage >= 100) {
+                    progressClass = 'danger';
+                } else if (progressPercentage >= 80) {
+                    progressClass = 'warning';
+                }
+                
                 plantCard.innerHTML = `
                     <h3>
                         <span><i class="fas fa-industry"></i> ${plant} Plant</span>
                     </h3>
+                    <div class="target-indicator">Target: ${targetVolume} m³</div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Daily Progress</span>
+                            <span>${progressPercentage.toFixed(1)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${progressClass}" style="width: ${progressPercentage}%"></div>
+                        </div>
+                    </div>
+                    
                     <div class="summary-stats">
                         <div class="stat-item">
                             <span class="stat-value">${projectCount}</span>
@@ -1068,7 +1558,8 @@
         
         // Render charts
         function renderCharts() {
-            const selectedDate = chartDate.value;
+            const startDateValue = chartStartDate.value;
+            const endDateValue = chartEndDate.value;
             const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
             const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
             
@@ -1082,9 +1573,17 @@
             };
             
             plants.forEach(plant => {
-                const plantSchedules = schedules.filter(schedule => 
-                    schedule.plant === plant && schedule.date === selectedDate
-                );
+                let plantSchedules = schedules.filter(schedule => schedule.plant === plant);
+                
+                // Apply date range filter
+                if (startDateValue && endDateValue) {
+                    plantSchedules = plantSchedules.filter(schedule => {
+                        const scheduleDate = new Date(schedule.date);
+                        const startDate = new Date(startDateValue);
+                        const endDate = new Date(endDateValue);
+                        return scheduleDate >= startDate && scheduleDate <= endDate;
+                    });
+                }
                 
                 plantVolumes[plant] = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
                 
@@ -1105,10 +1604,11 @@
             // Plant Volume Chart
             const plantCtx = document.getElementById('plantVolumeChart').getContext('2d');
             plantVolumeChart = new Chart(plantCtx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
                     labels: plants,
                     datasets: [{
+                        label: 'Volume (m³)',
                         data: plants.map(plant => plantVolumes[plant]),
                         backgroundColor: [
                             '#3498db', '#2ecc71', '#e74c3c', '#f39c12',
@@ -1119,13 +1619,20 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
                             text: 'Volume Distribution by Plant'
-                        },
-                        legend: {
-                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Volume (m³)'
+                            }
                         }
                     }
                 }
@@ -1153,6 +1660,7 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -1230,6 +1738,7 @@
         }
         
         // Initial render
+        loadDailyTargets();
         renderScheduleTable();
         renderSummary();
         renderCharts();
