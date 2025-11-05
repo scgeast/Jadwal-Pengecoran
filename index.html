@@ -159,6 +159,7 @@
         .sidebar-content {
             padding: 15px;
             height: calc(100% - 70px);
+            /* Ubah dari 'auto' menjadi 'hidden' untuk menyembunyikan scroll bar */
             overflow-y: hidden;
         }
         /* Sembunyikan konten target saat sidebar collapsed */
@@ -292,6 +293,7 @@
             font-size: 1.6rem;
             display: flex;
             align-items: center;
+            justify-content: space-between; /* Untuk meletakkan tombol di kanan */
         }
         h2 i {
             margin-right: 10px;
@@ -339,6 +341,25 @@
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+        }
+        /* Tombol Export Excel */
+        .export-btn {
+            background: none;
+            border: none;
+            color: var(--secondary); /* Gunakan warna sesuai tema Anda */
+            font-size: 1.2rem; /* Atur ukuran ikon */
+            cursor: pointer;
+            padding: 5px; /* Tambahkan sedikit padding untuk area klik */
+            transition: color 0.3s ease, transform 0.2s ease; /* Transisi untuk efek hover */
+        }
+
+        .export-btn:hover {
+            color: #2980b9; /* Warna saat hover */
+            transform: scale(1.1); /* Sedikit perbesar saat hover */
+        }
+
+        .export-btn i {
+            pointer-events: none; /* Pastikan ikon tidak menangani event klik sendiri */
         }
         table {
             width: 100%;
@@ -835,7 +856,12 @@
         <!-- Monitoring Section -->
         <section id="monitoring-section" class="content-section hidden">
             <div class="card">
-                <h2><i class="fas fa-eye"></i> Pouring Schedule Monitoring</h2>
+                <h2>
+                    <span><i class="fas fa-eye"></i> Pouring Schedule Monitoring</span>
+                    <button id="export-excel-btn" class="export-btn" title="Export to Excel">
+                        <i class="fas fa-file-excel"></i>
+                    </button>
+                </h2>
                 <div class="filter-section">
                     <div class="form-group">
                         <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
@@ -915,6 +941,7 @@
                             <th>Project Name</th>
                             <th>Plant</th>
                             <th>Volume (m³)</th>
+                            <th>Day</th> <!-- Kolom baru -->
                             <th>Date</th>
                             <th>Time</th>
                             <th>Time Period</th>
@@ -1223,6 +1250,14 @@
                 default: return 'Unknown';
             }
         }
+
+        // Fungsi untuk mendapatkan nama hari dari tanggal
+        function getDayName(dateString) {
+            const date = new Date(dateString);
+            const options = { weekday: 'long' }; // 'long', 'short', atau 'narrow'
+            return date.toLocaleDateString('id-ID', options); // Gunakan 'en-US' jika ingin bahasa Inggris
+        }
+
         // Render schedule table
         function renderScheduleTable() {
             const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
@@ -1263,17 +1298,19 @@
             });
             scheduleBody.innerHTML = '';
             if (filteredSchedules.length === 0) {
-                scheduleBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No pouring schedules found</td></tr>';
+                scheduleBody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No pouring schedules found</td></tr>';
                 return;
             }
             filteredSchedules.forEach((schedule, index) => {
                 const row = document.createElement('tr');
                 const timePeriod = getTimePeriod(schedule.time);
+                // Tambahkan kolom Day ke dalam baris tabel
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${schedule.projectName} ${schedule.isDaily ? '<span style="color: #e67e22; font-weight: bold;">(Daily)</span>' : ''}</td>
                     <td><i class="fas fa-industry"></i> ${schedule.plant}</td>
                     <td>${schedule.volume}</td>
+                    <td>${getDayName(schedule.date)}</td> <!-- Kolom Day -->
                     <td>${formatDate(schedule.date)}</td>
                     <td>${schedule.time}</td>
                     <td>${getTimePeriodLabel(timePeriod)}</td>
@@ -1543,6 +1580,115 @@
                 year: 'numeric'
             });
         }
+
+        // Fungsi untuk mengonversi data ke format CSV
+        function convertToCSV(data) {
+            if (!data || data.length === 0) return '';
+            const headers = Object.keys(data[0]);
+            const headerRow = headers.join(',');
+            const bodyRows = data.map(row => {
+                return headers.map(header => {
+                    let value = row[header];
+                    // Tangani nilai null/undefined
+                    if (value === null || value === undefined) value = '';
+                    // Tangani nilai string yang mengandung koma atau petik
+                    if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                        value = '"' + value.replace(/"/g, '""') + '"';
+                    }
+                    return value;
+                }).join(',');
+            });
+            return [headerRow, ...bodyRows].join('\n');
+        }
+
+        // Fungsi untuk mengunduh file CSV sebagai Excel
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('Browser tidak mendukung fitur download otomatis. Silakan salin data dan simpan sebagai file CSV.');
+                // Alternatif untuk browser lama bisa ditambahkan di sini
+            }
+        }
+
+        // Event listener untuk tombol export
+        document.getElementById('export-excel-btn').addEventListener('click', function() {
+            // Ambil data dari tabel yang ditampilkan
+            // Ambil filter aktif saat ini
+            const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
+            const filterStartDateValue = filterStartDate.value;
+            const filterEndDateValue = filterEndDate.value;
+            const filterPlantValue = filterPlant.value;
+            const filterTimeValue = filterTime.value;
+
+            let filteredSchedules = schedules;
+
+            // Terapkan filter seperti pada renderScheduleTable
+            if (activePlant !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
+            }
+            if (filterStartDateValue && filterEndDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.date);
+                    const startDate = new Date(filterStartDateValue);
+                    const endDate = new Date(filterEndDateValue);
+                    return scheduleDate >= startDate && scheduleDate <= endDate;
+                });
+            }
+            if (filterPlantValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
+            }
+            if (filterTimeValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    return period === filterTimeValue;
+                });
+            }
+
+            // Urutkan data sebelum diexport
+            filteredSchedules.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return dateA - dateB;
+            });
+
+            if (filteredSchedules.length === 0) {
+                alert('Tidak ada data untuk diekspor.');
+                return;
+            }
+
+            // Siapkan data untuk CSV, sesuaikan dengan kolom tabel
+            const csvData = filteredSchedules.map(schedule => ({
+                No: '', // Nomor akan diisi saat render, biarkan kosong untuk export
+                'Project Name': schedule.projectName,
+                Plant: schedule.plant,
+                'Volume (m³)': schedule.volume,
+                Day: getDayName(schedule.date), // Kolom baru
+                Date: formatDate(schedule.date),
+                Time: schedule.time,
+                'Time Period': getTimePeriodLabel(getTimePeriod(schedule.time)),
+                Notes: schedule.notes || '-',
+                // Kolom Actions tidak perlu diekspor
+            }));
+
+            // Tambahkan nomor urut ke data CSV
+            csvData.forEach((row, index) => {
+                row.No = index + 1;
+            });
+
+            const csvString = convertToCSV(csvData);
+            const filename = `Monitoring_Schedule_${new Date().toISOString().slice(0, 10)}.csv`;
+            downloadCSV(csvString, filename);
+        });
+
         // Initial render
         loadDailyTargets();
         renderScheduleTable();
