@@ -2027,25 +2027,38 @@
             });
         }
 
-        // Fungsi untuk mengonversi data ke format CSV dengan kolom terpisah
+        // PERBAIKAN: Fungsi untuk mengonversi data ke format CSV dengan BOM untuk encoding UTF-8
         function convertToCSV(data, headers) {
             if (!data || data.length === 0) return '';
             
-            const headerRow = headers.join(',');
-            const bodyRows = data.map(row => {
-                return headers.map(header => {
+            // Tambahkan BOM untuk UTF-8
+            let csv = '\uFEFF';
+            
+            const headerRow = headers.join(';');
+            csv += headerRow + '\r\n';
+            
+            data.forEach(row => {
+                const rowData = headers.map(header => {
                     let value = row[header] || '';
-                    if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                    // Handle nilai yang mengandung titik koma, quote, atau newline
+                    if (typeof value === 'string' && (value.includes(';') || value.includes('"') || value.includes('\n') || value.includes('\r'))) {
                         value = '"' + value.replace(/"/g, '""') + '"';
                     }
                     return value;
-                }).join(',');
+                });
+                csv += rowData.join(';') + '\r\n';
             });
-            return [headerRow, ...bodyRows].join('\n');
+            
+            return csv;
         }
 
-        // Fungsi untuk mengunduh file CSV sebagai Excel
+        // PERBAIKAN: Fungsi untuk mengunduh file CSV sebagai Excel dengan pemisah titik koma
         function downloadCSV(csv, filename) {
+            // Ganti ekstensi menjadi .csv untuk memastikan kompatibilitas
+            if (!filename.endsWith('.csv')) {
+                filename = filename.replace(/\.[^/.]+$/, "") + '.csv';
+            }
+            
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             if (link.download !== undefined) {
@@ -2061,7 +2074,7 @@
             }
         }
 
-        // Event listener untuk tombol export Schedule Detail
+        // PERBAIKAN: Event listener untuk tombol export Schedule Detail
         document.getElementById('export-excel-btn').addEventListener('click', function() {
             const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
             const filterStartDateValue = filterStartDate.value;
@@ -2123,7 +2136,7 @@
             downloadCSV(csvString, filename);
         });
 
-        // Event listener untuk export Summary Detail
+        // PERBAIKAN: Event listener untuk export Summary Detail
         exportSummaryDetailBtn.addEventListener('click', function() {
             const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active').getAttribute('data-plant');
             const startDateValue = summaryDetailStartDate.value;
@@ -2205,7 +2218,13 @@
                 });
                 
                 csvData.push(totalRow);
-                csvData.push({});
+                // Tambahkan baris kosong untuk pemisah antar plant
+                csvData.push({
+                    'Plant': '',
+                    'Project Name': '',
+                    'Time': '',
+                    ...Object.fromEntries(dateRange.map(date => [formatDateForTable(date.toISOString().split('T')[0]), '']))
+                });
             });
 
             const csvString = convertToCSV(csvData, headers);
