@@ -31,29 +31,21 @@
             display: flex;
             min-height: 100vh;
         }
-        /* Perubahan Utama: Hapus width eksplisit, gunakan flex: 1 dan margin-left */
         .container {
             flex: 1;
-            /* width: 100%; */ /* <-- Dihapus */
             padding: 20px;
-            /* Default margin-left sekarang mengikuti sidebar collapsed width */
             margin-left: var(--sidebar-collapsed-width);
             transition: margin-left 0.3s ease;
-            box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+            box-sizing: border-box;
         }
-        /* Kelas .expanded sekarang menyesuaikan dengan lebar sidebar penuh */
         .container.expanded {
-            margin-left: var(--sidebar-width); /* Geser ke kanan sesuai sidebar diperluas */
-            /* width: calc(100% - var(--sidebar-width)); */ /* <-- Dihapus */
-            /* Karena flex: 1, lebar akan otomatis menyesuaikan sisa ruang setelah margin */
+            margin-left: var(--sidebar-width);
         }
         header {
-            background: linear-gradient(135deg, #2c3e50 0%, #9b59b6 100%); /* Biru Tua ke Ungu Muda */
+            background: linear-gradient(135deg, #2c3e50 0%, #9b59b6 100%);
             color: white;
             padding: 15px 0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            /* Hapus border-bottom jika ingin benar-benar tanpa border di bawah header */
-            /* border-bottom: 3px solid var(--secondary); */
             margin-bottom: 20px;
             position: relative;
         }
@@ -88,17 +80,15 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
             color: rgba(255,255,255,0.9);
             padding: 0;
-            border: none; /* Memastikan tidak ada border */
+            border: none;
             background: transparent;
             backdrop-filter: none;
         }
-        /* Sidebar Styles */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
-            /* Default width sekarang adalah collapsed width */
             width: var(--sidebar-collapsed-width);
             background: linear-gradient(180deg, var(--primary), #1a2530);
             color: white;
@@ -107,11 +97,9 @@
             z-index: 1000;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
-        /* Kelas .collapsed sekarang hanya memastikan lebar kecil */
         .sidebar.collapsed {
             width: var(--sidebar-collapsed-width);
         }
-        /* Kelas .expanded menyesuaikan lebar penuh */
         .sidebar.expanded {
             width: var(--sidebar-width);
         }
@@ -126,10 +114,9 @@
         .sidebar-header h3 {
             font-size: 1.2rem;
             white-space: nowrap;
-            opacity: 0; /* Default sembunyikan teks */
+            opacity: 0;
             transition: opacity 0.3s ease;
         }
-        /* Tampilkan teks hanya saat sidebar expanded */
         .sidebar:not(.collapsed) .sidebar-header h3 {
             opacity: 1;
         }
@@ -159,10 +146,8 @@
         .sidebar-content {
             padding: 15px;
             height: calc(100% - 70px);
-            /* Ubah dari 'auto' menjadi 'hidden' untuk menyembunyikan scroll bar */
             overflow-y: hidden;
         }
-        /* Sembunyikan konten target saat sidebar collapsed */
         .target-section h4,
         .target-item label,
         .save-targets {
@@ -293,7 +278,7 @@
             font-size: 1.6rem;
             display: flex;
             align-items: center;
-            justify-content: space-between; /* Untuk meletakkan tombol di kanan */
+            justify-content: space-between;
         }
         h2 i {
             margin-right: 10px;
@@ -342,24 +327,21 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
         }
-        /* Tombol Export Excel */
         .export-btn {
             background: none;
             border: none;
-            color: var(--secondary); /* Gunakan warna sesuai tema Anda */
-            font-size: 1.2rem; /* Atur ukuran ikon */
+            color: var(--secondary);
+            font-size: 1.2rem;
             cursor: pointer;
-            padding: 5px; /* Tambahkan sedikit padding untuk area klik */
-            transition: color 0.3s ease, transform 0.2s ease; /* Transisi untuk efek hover */
+            padding: 5px;
+            transition: color 0.3s ease, transform 0.2s ease;
         }
-
         .export-btn:hover {
-            color: #2980b9; /* Warna saat hover */
-            transform: scale(1.1); /* Sedikit perbesar saat hover */
+            color: #2980b9;
+            transform: scale(1.1);
         }
-
         .export-btn i {
-            pointer-events: none; /* Pastikan ikon tidak menangani event klik sendiri */
+            pointer-events: none;
         }
         table {
             width: 100%;
@@ -558,7 +540,6 @@
             color: white;
             border-bottom-color: var(--primary);
         }
-        /* SINGLE ROW FORM STYLES */
         .single-row-form {
             display: grid;
             grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1.5fr 1fr 1.5fr 1fr;
@@ -639,7 +620,6 @@
             height: 300px;
             position: relative;
         }
-        /* Tambahan CSS untuk Summary Detail */
         .summary-detail-table {
             width: 100%;
             border-collapse: collapse;
@@ -694,17 +674,17 @@
                 margin-left: 0;
                 padding: 15px;
             }
-            .container.expanded { /* Tidak relevan di mobile karena sidebar di transform */
+            .container.expanded {
                 margin-left: 0;
             }
             .sidebar {
                 transform: translateX(-100%);
             }
-            .sidebar.collapsed { /* Saat kolaps, tetap disembunyikan */
+            .sidebar.collapsed {
                 transform: translateX(-100%);
-                width: var(--sidebar-collapsed-width); /* Gunakan lebar kolaps untuk ukuran saat disembunyikan */
+                width: var(--sidebar-collapsed-width);
             }
-            .sidebar.active { /* Tampilkan sidebar saat aktif */
+            .sidebar.active {
                 transform: translateX(0);
             }
             .header-content {
@@ -749,12 +729,10 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <!-- Tambahkan kelas 'collapsed' secara default -->
     <div class="sidebar collapsed">
         <div class="sidebar-header">
             <h3><i class="fas fa-bullseye"></i> Daily Targets</h3>
             <button class="toggle-btn">
-                <!-- Ikon default adalah chevron right (karena sidebar kolaps) -->
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
@@ -802,7 +780,7 @@
             </div>
         </div>
     </div>
-    <!-- Hapus kelas 'expanded' dari container -->
+
     <div class="container">
         <header>
             <div class="header-content">
@@ -813,13 +791,13 @@
                 <div class="datetime" id="current-date">05/11/2025</div>
             </div>
         </header>
+        
         <nav>
             <ul>
                 <li><a href="#" class="nav-link active" data-target="input-section">
                     <i class="fas fa-plus-circle"></i>
                     <span>Schedule Input</span>
                 </a></li>
-                <!-- Ganti nama tab Monitoring menjadi Schedule Detail -->
                 <li><a href="#" class="nav-link" data-target="monitoring-section">
                     <i class="fas fa-eye"></i>
                     <span>Schedule Detail</span>
@@ -828,7 +806,6 @@
                     <i class="fas fa-chart-bar"></i>
                     <span>Summary</span>
                 </a></li>
-                <!-- Tambah tab baru Summary Detail -->
                 <li><a href="#" class="nav-link" data-target="summary-detail-section">
                     <i class="fas fa-table"></i>
                     <span>Summary Detail</span>
@@ -839,6 +816,7 @@
                 </a></li>
             </ul>
         </nav>
+        
         <!-- Input Section -->
         <section id="input-section" class="content-section">
             <div class="card">
@@ -882,7 +860,7 @@
                             <label for="notes"><i class="fas fa-sticky-note"></i> Notes</label>
                             <input type="text" id="notes" placeholder="Optional">
                         </div>
-                        <button type="submit">
+                        <button type="submit" id="submit-btn">
                             <i class="fas fa-save"></i>
                             Save
                         </button>
@@ -900,7 +878,8 @@
                 </form>
             </div>
         </section>
-        <!-- Schedule Detail Section (sebelumnya Monitoring) -->
+        
+        <!-- Schedule Detail Section -->
         <section id="monitoring-section" class="content-section hidden">
             <div class="card">
                 <h2>
@@ -988,7 +967,7 @@
                             <th>Project Name</th>
                             <th>Plant</th>
                             <th>Volume (m³)</th>
-                            <th>Day</th> <!-- Kolom baru -->
+                            <th>Day</th>
                             <th>Date</th>
                             <th>Time</th>
                             <th>Time Period</th>
@@ -1002,6 +981,7 @@
                 </table>
             </div>
         </section>
+        
         <!-- Summary Section -->
         <section id="summary-section" class="content-section hidden">
             <div class="card">
@@ -1026,7 +1006,8 @@
                 </div>
             </div>
         </section>
-        <!-- Summary Detail Section (BARU) -->
+        
+        <!-- Summary Detail Section -->
         <section id="summary-detail-section" class="content-section hidden">
             <div class="card">
                 <h2>
@@ -1124,6 +1105,7 @@
                 </div>
             </div>
         </section>
+        
         <!-- Chart Section -->
         <section id="chart-section" class="content-section hidden">
             <div class="card">
@@ -1160,6 +1142,7 @@
             </div>
         </section>
     </div>
+
     <script>
         // Concrete pouring schedule data
         let schedules = JSON.parse(localStorage.getItem('schedules')) || [];
@@ -1172,6 +1155,10 @@
             Denpasar2: 75,
             Gianyar: 95
         };
+        
+        // Variabel untuk menyimpan ID schedule yang sedang diedit
+        let editingScheduleId = null;
+
         // DOM Elements
         const navLinks = document.querySelectorAll('.nav-link');
         const contentSections = document.querySelectorAll('.content-section');
@@ -1195,9 +1182,7 @@
         const container = document.querySelector('.container');
         const saveTargetsBtn = document.getElementById('save-targets');
         const currentDateElement = document.getElementById('current-date');
-        // Chart instances
-        let plantVolumeChart = null;
-        let shiftVolumeChart = null;
+        const submitBtn = document.getElementById('submit-btn');
         
         // DOM Elements untuk Summary Detail
         const summaryDetailStartDate = document.getElementById('summary-detail-start-date');
@@ -1207,6 +1192,10 @@
         const summaryDetailPlantTabs = document.querySelectorAll('#summary-detail-plant-tabs .plant-tab');
         const summaryDetailBody = document.getElementById('summary-detail-body');
         const exportSummaryDetailBtn = document.getElementById('export-summary-detail-btn');
+        
+        // Chart instances
+        let plantVolumeChart = null;
+        let shiftVolumeChart = null;
         
         // Set default date to today
         const today = new Date().toISOString().split('T')[0];
@@ -1232,9 +1221,11 @@
             const year = now.getFullYear();
             currentDateElement.textContent = `${day}/${month}/${year}`;
         }
+        
         // Update date every minute
         setInterval(updateDate, 60000);
         updateDate(); // Initial call
+        
         // Load daily targets
         function loadDailyTargets() {
             document.getElementById('target-manukan').value = dailyTargets.Manukan;
@@ -1245,6 +1236,7 @@
             document.getElementById('target-denpasar2').value = dailyTargets.Denpasar2;
             document.getElementById('target-gianyar').value = dailyTargets.Gianyar;
         }
+        
         // Save daily targets
         function saveDailyTargets() {
             dailyTargets = {
@@ -1260,23 +1252,23 @@
             alert('Daily targets saved successfully!');
             renderSummary();
         }
+        
         // Toggle sidebar
         toggleBtn.addEventListener('click', function() {
-            // Toggle kelas collapsed/expanded pada sidebar
             sidebar.classList.toggle('collapsed');
             sidebar.classList.toggle('expanded');
-            // Toggle kelas expanded pada container
             container.classList.toggle('expanded');
-            // Change icon based on state
             const icon = toggleBtn.querySelector('i');
             if (sidebar.classList.contains('collapsed')) {
-                icon.className = 'fas fa-chevron-right'; // Ikon saat kolaps
+                icon.className = 'fas fa-chevron-right';
             } else {
-                icon.className = 'fas fa-chevron-left'; // Ikon saat diperluas
+                icon.className = 'fas fa-chevron-left';
             }
         });
+        
         // Save targets button
         saveTargetsBtn.addEventListener('click', saveDailyTargets);
+        
         // Toggle date range based on checkbox
         dailyScheduleCheckbox.addEventListener('change', function() {
             if (this.checked) {
@@ -1287,20 +1279,18 @@
                 dateRangeDiv.classList.add('hidden');
             }
         });
+        
         // Navigation
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const target = link.getAttribute('data-target');
-                // Update active nav link
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 link.classList.add('active');
-                // Show target section
                 contentSections.forEach(section => {
                     section.classList.add('hidden');
                 });
                 document.getElementById(target).classList.remove('hidden');
-                // Refresh data if needed
                 if (target === 'monitoring-section') {
                     renderScheduleTable();
                 } else if (target === 'summary-section') {
@@ -1312,6 +1302,7 @@
                 }
             });
         });
+        
         // Plant tabs for monitoring
         plantTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -1335,9 +1326,11 @@
         filterEndDate.addEventListener('change', renderScheduleTable);
         filterPlant.addEventListener('change', renderScheduleTable);
         filterTime.addEventListener('change', renderScheduleTable);
+        
         // Summary date range listeners
         summaryStartDate.addEventListener('change', renderSummary);
         summaryEndDate.addEventListener('change', renderSummary);
+        
         // Chart date range listeners
         chartStartDate.addEventListener('change', renderCharts);
         chartEndDate.addEventListener('change', renderCharts);
@@ -1348,7 +1341,7 @@
         summaryDetailFilterPlant.addEventListener('change', renderSummaryDetail);
         summaryDetailFilterTime.addEventListener('change', renderSummaryDetail);
         
-        // Form submission
+        // Form submission - PERBAIKAN: Mendukung edit dan create
         scheduleForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const projectName = document.getElementById('project-name').value;
@@ -1357,60 +1350,114 @@
             const time = document.getElementById('time').value;
             const notes = document.getElementById('notes').value;
             const isDaily = dailyScheduleCheckbox.checked;
-            let newSchedules = [];
-            if (isDaily) {
-                // Create multiple schedules for date range
-                const startDate = new Date(document.getElementById('start-date').value);
-                const endDate = new Date(document.getElementById('end-date').value);
-                // Validate date range
-                if (startDate > endDate) {
-                    alert('Start date cannot be after end date!');
-                    return;
+            
+            if (editingScheduleId) {
+                // Update existing schedule
+                const scheduleIndex = schedules.findIndex(s => s.id === editingScheduleId);
+                if (scheduleIndex !== -1) {
+                    if (isDaily) {
+                        // Untuk daily schedule, kita perlu menghapus yang lama dan buat yang baru
+                        schedules = schedules.filter(s => s.id !== editingScheduleId);
+                        const startDate = new Date(document.getElementById('start-date').value);
+                        const endDate = new Date(document.getElementById('end-date').value);
+                        
+                        if (startDate > endDate) {
+                            alert('Start date cannot be after end date!');
+                            return;
+                        }
+                        
+                        const currentDate = new Date(startDate);
+                        while (currentDate <= endDate) {
+                            const dateStr = currentDate.toISOString().split('T')[0];
+                            schedules.push({
+                                id: Date.now() + Math.random(),
+                                projectName,
+                                plant,
+                                volume,
+                                date: dateStr,
+                                time,
+                                notes,
+                                isDaily: true
+                            });
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                    } else {
+                        // Single date schedule
+                        const date = document.getElementById('date').value;
+                        schedules[scheduleIndex] = {
+                            id: editingScheduleId,
+                            projectName,
+                            plant,
+                            volume,
+                            date,
+                            time,
+                            notes,
+                            isDaily: false
+                        };
+                    }
                 }
-                // Create a schedule for each day in the range
-                const currentDate = new Date(startDate);
-                while (currentDate <= endDate) {
-                    const dateStr = currentDate.toISOString().split('T')[0];
+                alert('Schedule updated successfully!');
+                editingScheduleId = null;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+            } else {
+                // Create new schedule
+                let newSchedules = [];
+                if (isDaily) {
+                    const startDate = new Date(document.getElementById('start-date').value);
+                    const endDate = new Date(document.getElementById('end-date').value);
+                    
+                    if (startDate > endDate) {
+                        alert('Start date cannot be after end date!');
+                        return;
+                    }
+                    
+                    const currentDate = new Date(startDate);
+                    while (currentDate <= endDate) {
+                        const dateStr = currentDate.toISOString().split('T')[0];
+                        newSchedules.push({
+                            id: Date.now() + Math.random(),
+                            projectName,
+                            plant,
+                            volume,
+                            date: dateStr,
+                            time,
+                            notes,
+                            isDaily: true
+                        });
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                } else {
+                    const date = document.getElementById('date').value;
                     newSchedules.push({
-                        id: Date.now() + Math.random(), // Unique ID for each
+                        id: Date.now(),
                         projectName,
                         plant,
                         volume,
-                        date: dateStr,
+                        date,
                         time,
                         notes,
-                        isDaily: true
+                        isDaily: false
                     });
-                    // Move to next day
-                    currentDate.setDate(currentDate.getDate() + 1);
                 }
-            } else {
-                // Single date schedule
-                const date = document.getElementById('date').value;
-                newSchedules.push({
-                    id: Date.now(),
-                    projectName,
-                    plant,
-                    volume,
-                    date,
-                    time,
-                    notes,
-                    isDaily: false
-                });
+                
+                schedules.push(...newSchedules);
+                alert(`Schedule saved successfully! ${newSchedules.length} entries added.`);
             }
-            // Add all new schedules
-            schedules.push(...newSchedules);
+            
             saveSchedules();
             scheduleForm.reset();
-            // Reset date fields
             document.getElementById('date').value = today;
             document.getElementById('start-date').value = today;
             document.getElementById('end-date').value = today;
             dailyScheduleCheckbox.checked = false;
             singleDateDiv.classList.remove('hidden');
             dateRangeDiv.classList.add('hidden');
-            alert(`Schedule saved successfully! ${newSchedules.length} entries added.`);
+            
+            renderScheduleTable();
+            renderSummary();
+            renderSummaryDetail();
         });
+        
         // Get time period based on time
         function getTimePeriod(time) {
             const hour = parseInt(time.split(':')[0]);
@@ -1419,6 +1466,7 @@
             if (hour >= 15 && hour < 19) return 'evening';
             return 'night';
         }
+        
         // Get time period label
         function getTimePeriodLabel(period) {
             switch(period) {
@@ -1433,8 +1481,8 @@
         // Fungsi untuk mendapatkan nama hari dari tanggal
         function getDayName(dateString) {
             const date = new Date(dateString);
-            const options = { weekday: 'long' }; // 'long', 'short', atau 'narrow'
-            return date.toLocaleDateString('id-ID', options); // Gunakan 'en-US' jika ingin bahasa Inggris
+            const options = { weekday: 'long' };
+            return date.toLocaleDateString('id-ID', options);
         }
 
         // Render schedule table
@@ -1445,11 +1493,11 @@
             const filterPlantValue = filterPlant.value;
             const filterTimeValue = filterTime.value;
             let filteredSchedules = schedules;
-            // Apply plant filter
+            
             if (activePlant !== 'all') {
                 filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
             }
-            // Apply date range filter
+            
             if (filterStartDateValue && filterEndDateValue) {
                 filteredSchedules = filteredSchedules.filter(schedule => {
                     const scheduleDate = new Date(schedule.date);
@@ -1458,38 +1506,39 @@
                     return scheduleDate >= startDate && scheduleDate <= endDate;
                 });
             }
-            // Apply plant dropdown filter
+            
             if (filterPlantValue !== 'all') {
                 filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
             }
-            // Apply time period filter
+            
             if (filterTimeValue !== 'all') {
                 filteredSchedules = filteredSchedules.filter(schedule => {
                     const period = getTimePeriod(schedule.time);
                     return period === filterTimeValue;
                 });
             }
-            // Sort by date and time
+            
             filteredSchedules.sort((a, b) => {
                 const dateA = new Date(a.date + ' ' + a.time);
                 const dateB = new Date(b.date + ' ' + b.time);
                 return dateA - dateB;
             });
+            
             scheduleBody.innerHTML = '';
             if (filteredSchedules.length === 0) {
                 scheduleBody.innerHTML = '<tr><td colspan="10" style="text-align: center;">No pouring schedules found</td></tr>';
                 return;
             }
+            
             filteredSchedules.forEach((schedule, index) => {
                 const row = document.createElement('tr');
                 const timePeriod = getTimePeriod(schedule.time);
-                // Tambahkan kolom Day ke dalam baris tabel
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${schedule.projectName} ${schedule.isDaily ? '<span style="color: #e67e22; font-weight: bold;">(Daily)</span>' : ''}</td>
                     <td><i class="fas fa-industry"></i> ${schedule.plant}</td>
                     <td>${schedule.volume}</td>
-                    <td>${getDayName(schedule.date)}</td> <!-- Kolom Day -->
+                    <td>${getDayName(schedule.date)}</td>
                     <td>${formatDate(schedule.date)}</td>
                     <td>${schedule.time}</td>
                     <td>${getTimePeriodLabel(timePeriod)}</td>
@@ -1508,16 +1557,274 @@
                 scheduleBody.appendChild(row);
             });
         }
+        
+        // Edit schedule - PERBAIKAN: Tidak menghapus data saat edit
+        function editSchedule(id) {
+            const schedule = schedules.find(s => s.id === id);
+            if (!schedule) return;
+            
+            document.getElementById('project-name').value = schedule.projectName;
+            document.getElementById('plant').value = schedule.plant;
+            document.getElementById('volume').value = schedule.volume;
+            document.getElementById('time').value = schedule.time;
+            document.getElementById('notes').value = schedule.notes || '';
+            
+            if (schedule.isDaily) {
+                dailyScheduleCheckbox.checked = true;
+                singleDateDiv.classList.add('hidden');
+                dateRangeDiv.classList.remove('hidden');
+                document.getElementById('start-date').value = schedule.date;
+                document.getElementById('end-date').value = schedule.date;
+            } else {
+                dailyScheduleCheckbox.checked = false;
+                singleDateDiv.classList.remove('hidden');
+                dateRangeDiv.classList.add('hidden');
+                document.getElementById('date').value = schedule.date;
+            }
+            
+            editingScheduleId = id;
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Schedule';
+            
+            // Switch to input section
+            document.querySelector('.nav-link[data-target="input-section"]').click();
+        }
+        
+        // Delete schedule
+        function deleteSchedule(id, confirmDelete = true) {
+            if (confirmDelete && !confirm('Are you sure you want to delete this schedule?')) {
+                return;
+            }
+            schedules = schedules.filter(schedule => schedule.id !== id);
+            saveSchedules();
+            renderScheduleTable();
+            renderSummary();
+            renderSummaryDetail();
+        }
+        
+        // Save schedules to localStorage
+        function saveSchedules() {
+            localStorage.setItem('schedules', JSON.stringify(schedules));
+        }
+        
+        // Format date to standard format
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        
+        // Fungsi untuk merender Summary Detail
+        function renderSummaryDetail() {
+            const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active').getAttribute('data-plant');
+            const startDateValue = summaryDetailStartDate.value;
+            const endDateValue = summaryDetailEndDate.value;
+            const filterPlantValue = summaryDetailFilterPlant.value;
+            const filterTimeValue = summaryDetailFilterTime.value;
+            
+            let filteredSchedules = schedules;
+            
+            if (activePlant !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
+            }
+            
+            if (startDateValue && endDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.date);
+                    const startDate = new Date(startDateValue);
+                    const endDate = new Date(endDateValue);
+                    return scheduleDate >= startDate && scheduleDate <= endDate;
+                });
+            }
+            
+            if (filterPlantValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
+            }
+            
+            if (filterTimeValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    return period === filterTimeValue;
+                });
+            }
+            
+            const dateRange = getDateRange(startDateValue, endDateValue);
+            const groupedData = groupDataByPlantAndProject(filteredSchedules, dateRange);
+            renderSummaryDetailTable(groupedData, dateRange);
+        }
+        
+        // Fungsi untuk mendapatkan rentang tanggal
+        function getDateRange(startDate, endDate) {
+            const dates = [];
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            let currentDate = new Date(start);
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return dates;
+        }
+        
+        // Fungsi untuk mengelompokkan data berdasarkan plant dan project
+        function groupDataByPlantAndProject(schedules, dateRange) {
+            const grouped = {};
+            
+            schedules.forEach(schedule => {
+                const plant = schedule.plant;
+                const projectName = schedule.projectName;
+                const time = schedule.time.substring(0, 5);
+                const date = schedule.date;
+                const volume = schedule.volume;
+                const isDaily = schedule.isDaily;
+                
+                if (!grouped[plant]) {
+                    grouped[plant] = {};
+                }
+                
+                if (!grouped[plant][projectName]) {
+                    grouped[plant][projectName] = {
+                        time: time,
+                        volumes: {},
+                        isDaily: isDaily
+                    };
+                }
+                
+                if (!grouped[plant][projectName].time) {
+                    grouped[plant][projectName].time = time;
+                }
+                
+                const dateKey = formatDateForTable(date);
+                if (!grouped[plant][projectName].volumes[dateKey]) {
+                    grouped[plant][projectName].volumes[dateKey] = 0;
+                }
+                grouped[plant][projectName].volumes[dateKey] += volume;
+            });
+            
+            return grouped;
+        }
+        
+        // Fungsi untuk merender tabel Summary Detail
+        function renderSummaryDetailTable(groupedData, dateRange) {
+            summaryDetailBody.innerHTML = '';
+            
+            const headerRow = document.querySelector('#summary-detail-table thead tr');
+            while (headerRow.children.length > 3) {
+                headerRow.removeChild(headerRow.lastChild);
+            }
+            
+            dateRange.forEach(date => {
+                const dateHeader = document.createElement('th');
+                dateHeader.textContent = formatDateForTable(date.toISOString().split('T')[0]);
+                headerRow.appendChild(dateHeader);
+            });
+            
+            Object.keys(groupedData).sort().forEach(plant => {
+                const plantHeaderRow = document.createElement('tr');
+                plantHeaderRow.className = 'plant-header';
+                const plantHeaderCell = document.createElement('td');
+                plantHeaderCell.textContent = plant;
+                plantHeaderCell.colSpan = dateRange.length + 3;
+                plantHeaderRow.appendChild(plantHeaderCell);
+                summaryDetailBody.appendChild(plantHeaderRow);
+                
+                Object.keys(groupedData[plant]).sort().forEach(projectName => {
+                    const projectRow = document.createElement('tr');
+                    
+                    const plantCell = document.createElement('td');
+                    plantCell.textContent = '';
+                    projectRow.appendChild(plantCell);
+                    
+                    const projectCell = document.createElement('td');
+                    projectCell.textContent = projectName;
+                    if (groupedData[plant][projectName].isDaily) {
+                        const dailyIndicator = document.createElement('span');
+                        dailyIndicator.className = 'daily-indicator';
+                        dailyIndicator.textContent = '(Daily)';
+                        projectCell.appendChild(dailyIndicator);
+                    }
+                    projectRow.appendChild(projectCell);
+                    
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = groupedData[plant][projectName].time;
+                    projectRow.appendChild(timeCell);
+                    
+                    dateRange.forEach(date => {
+                        const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                        const volumeCell = document.createElement('td');
+                        const volume = groupedData[plant][projectName].volumes[dateKey] || '';
+                        volumeCell.textContent = volume;
+                        projectRow.appendChild(volumeCell);
+                    });
+                    
+                    summaryDetailBody.appendChild(projectRow);
+                });
+                
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'total-row';
+                
+                const totalPlantCell = document.createElement('td');
+                totalPlantCell.textContent = plant + ' Total';
+                totalRow.appendChild(totalPlantCell);
+                
+                const totalProjectCell = document.createElement('td');
+                totalProjectCell.textContent = '';
+                totalRow.appendChild(totalProjectCell);
+                
+                const totalTimeCell = document.createElement('td');
+                totalTimeCell.textContent = '';
+                totalRow.appendChild(totalTimeCell);
+                
+                dateRange.forEach(date => {
+                    const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                    let totalVolume = 0;
+                    
+                    Object.keys(groupedData[plant]).forEach(projectName => {
+                        totalVolume += groupedData[plant][projectName].volumes[dateKey] || 0;
+                    });
+                    
+                    const totalCell = document.createElement('td');
+                    totalCell.textContent = totalVolume > 0 ? totalVolume : '';
+                    totalRow.appendChild(totalCell);
+                });
+                
+                summaryDetailBody.appendChild(totalRow);
+            });
+            
+            if (Object.keys(groupedData).length === 0) {
+                const noDataRow = document.createElement('tr');
+                const noDataCell = document.createElement('td');
+                noDataCell.colSpan = dateRange.length + 3;
+                noDataCell.textContent = 'No data available for the selected filters';
+                noDataCell.style.textAlign = 'center';
+                noDataRow.appendChild(noDataCell);
+                summaryDetailBody.appendChild(noDataRow);
+            }
+        }
+        
+        // Fungsi untuk memformat tanggal untuk tabel (DD/MM/YYYY)
+        function formatDateForTable(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
         // Render summary
         function renderSummary() {
             const startDateValue = summaryStartDate.value;
             const endDateValue = summaryEndDate.value;
             const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
-            const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
             summaryContainer.innerHTML = '';
+            
             plants.forEach(plant => {
                 let plantSchedules = schedules.filter(schedule => schedule.plant === plant);
-                // Apply date range filter
+                
                 if (startDateValue && endDateValue) {
                     plantSchedules = plantSchedules.filter(schedule => {
                         const scheduleDate = new Date(schedule.date);
@@ -1526,30 +1833,34 @@
                         return scheduleDate >= startDate && scheduleDate <= endDate;
                     });
                 }
+                
                 const totalVolume = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
                 const projectCount = plantSchedules.length;
                 const targetVolume = dailyTargets[plant] || 0;
                 const progressPercentage = targetVolume > 0 ? Math.min((totalVolume / targetVolume) * 100, 100) : 0;
-                // Calculate volume by shift
+                
                 const shiftVolumes = {
                     morning: 0,
                     afternoon: 0,
                     evening: 0,
                     night: 0
                 };
+                
                 plantSchedules.forEach(schedule => {
                     const period = getTimePeriod(schedule.time);
                     shiftVolumes[period] += schedule.volume;
                 });
+                
                 const plantCard = document.createElement('div');
                 plantCard.className = 'plant-summary-card';
-                // Determine progress bar color
+                
                 let progressClass = '';
                 if (progressPercentage >= 100) {
                     progressClass = 'danger';
                 } else if (progressPercentage >= 80) {
                     progressClass = 'warning';
                 }
+                
                 plantCard.innerHTML = `
                     <h3>
                         <span><i class="fas fa-industry"></i> ${plant} Plant</span>
@@ -1597,242 +1908,12 @@
             });
         }
         
-        // Fungsi untuk merender Summary Detail
-        function renderSummaryDetail() {
-            const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active').getAttribute('data-plant');
-            const startDateValue = summaryDetailStartDate.value;
-            const endDateValue = summaryDetailEndDate.value;
-            const filterPlantValue = summaryDetailFilterPlant.value;
-            const filterTimeValue = summaryDetailFilterTime.value;
-            
-            // Filter data berdasarkan kriteria
-            let filteredSchedules = schedules;
-            
-            // Filter berdasarkan plant
-            if (activePlant !== 'all') {
-                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
-            }
-            
-            // Filter berdasarkan tanggal
-            if (startDateValue && endDateValue) {
-                filteredSchedules = filteredSchedules.filter(schedule => {
-                    const scheduleDate = new Date(schedule.date);
-                    const startDate = new Date(startDateValue);
-                    const endDate = new Date(endDateValue);
-                    return scheduleDate >= startDate && scheduleDate <= endDate;
-                });
-            }
-            
-            // Filter berdasarkan plant dropdown
-            if (filterPlantValue !== 'all') {
-                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
-            }
-            
-            // Filter berdasarkan time period
-            if (filterTimeValue !== 'all') {
-                filteredSchedules = filteredSchedules.filter(schedule => {
-                    const period = getTimePeriod(schedule.time);
-                    return period === filterTimeValue;
-                });
-            }
-            
-            // Generate array tanggal dari startDate sampai endDate
-            const dateRange = getDateRange(startDateValue, endDateValue);
-            
-            // Kelompokkan data berdasarkan plant dan project
-            const groupedData = groupDataByPlantAndProject(filteredSchedules, dateRange);
-            
-            // Render tabel
-            renderSummaryDetailTable(groupedData, dateRange);
-        }
-        
-        // Fungsi untuk mendapatkan rentang tanggal
-        function getDateRange(startDate, endDate) {
-            const dates = [];
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            
-            let currentDate = new Date(start);
-            while (currentDate <= end) {
-                dates.push(new Date(currentDate));
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-            
-            return dates;
-        }
-        
-        // Fungsi untuk mengelompokkan data berdasarkan plant dan project
-        function groupDataByPlantAndProject(schedules, dateRange) {
-            const grouped = {};
-            
-            schedules.forEach(schedule => {
-                const plant = schedule.plant;
-                const projectName = schedule.projectName;
-                const time = schedule.time.substring(0, 5); // Format HH:MM
-                const date = schedule.date;
-                const volume = schedule.volume;
-                const isDaily = schedule.isDaily;
-                
-                if (!grouped[plant]) {
-                    grouped[plant] = {};
-                }
-                
-                if (!grouped[plant][projectName]) {
-                    grouped[plant][projectName] = {
-                        time: time,
-                        volumes: {},
-                        isDaily: isDaily
-                    };
-                }
-                
-                // Jika project sudah ada, pastikan time sama atau gunakan yang pertama
-                if (!grouped[plant][projectName].time) {
-                    grouped[plant][projectName].time = time;
-                }
-                
-                // Tambahkan volume untuk tanggal tertentu
-                const dateKey = formatDateForTable(date);
-                if (!grouped[plant][projectName].volumes[dateKey]) {
-                    grouped[plant][projectName].volumes[dateKey] = 0;
-                }
-                grouped[plant][projectName].volumes[dateKey] += volume;
-            });
-            
-            return grouped;
-        }
-        
-        // Fungsi untuk merender tabel Summary Detail
-        function renderSummaryDetailTable(groupedData, dateRange) {
-            // Kosongkan body tabel
-            summaryDetailBody.innerHTML = '';
-            
-            // Buat header untuk tanggal
-            const headerRow = document.querySelector('#summary-detail-table thead tr');
-            
-            // Hapus kolom tanggal yang sudah ada (selain 3 kolom pertama)
-            while (headerRow.children.length > 3) {
-                headerRow.removeChild(headerRow.lastChild);
-            }
-            
-            // Tambahkan kolom untuk setiap tanggal
-            dateRange.forEach(date => {
-                const dateHeader = document.createElement('th');
-                dateHeader.textContent = formatDateForTable(date.toISOString().split('T')[0]);
-                headerRow.appendChild(dateHeader);
-            });
-            
-            // Render data untuk setiap plant
-            Object.keys(groupedData).sort().forEach(plant => {
-                // Tambahkan baris untuk header plant
-                const plantHeaderRow = document.createElement('tr');
-                plantHeaderRow.className = 'plant-header';
-                const plantHeaderCell = document.createElement('td');
-                plantHeaderCell.textContent = plant;
-                plantHeaderCell.colSpan = dateRange.length + 3; // 3 kolom pertama + tanggal
-                plantHeaderRow.appendChild(plantHeaderCell);
-                summaryDetailBody.appendChild(plantHeaderRow);
-                
-                // Render setiap project dalam plant
-                Object.keys(groupedData[plant]).sort().forEach(projectName => {
-                    const projectRow = document.createElement('tr');
-                    
-                    // Kolom plant (kosong karena sudah ada header plant)
-                    const plantCell = document.createElement('td');
-                    plantCell.textContent = '';
-                    projectRow.appendChild(plantCell);
-                    
-                    // Kolom project name
-                    const projectCell = document.createElement('td');
-                    projectCell.textContent = projectName;
-                    if (groupedData[plant][projectName].isDaily) {
-                        const dailyIndicator = document.createElement('span');
-                        dailyIndicator.className = 'daily-indicator';
-                        dailyIndicator.textContent = '(Daily)';
-                        projectCell.appendChild(dailyIndicator);
-                    }
-                    projectRow.appendChild(projectCell);
-                    
-                    // Kolom time
-                    const timeCell = document.createElement('td');
-                    timeCell.textContent = groupedData[plant][projectName].time;
-                    projectRow.appendChild(timeCell);
-                    
-                    // Kolom volume untuk setiap tanggal
-                    dateRange.forEach(date => {
-                        const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
-                        const volumeCell = document.createElement('td');
-                        const volume = groupedData[plant][projectName].volumes[dateKey] || '';
-                        volumeCell.textContent = volume;
-                        projectRow.appendChild(volumeCell);
-                    });
-                    
-                    summaryDetailBody.appendChild(projectRow);
-                });
-                
-                // Tambahkan baris total untuk plant
-                const totalRow = document.createElement('tr');
-                totalRow.className = 'total-row';
-                
-                // Kolom plant
-                const totalPlantCell = document.createElement('td');
-                totalPlantCell.textContent = plant + ' Total';
-                totalRow.appendChild(totalPlantCell);
-                
-                // Kolom project name (kosong)
-                const totalProjectCell = document.createElement('td');
-                totalProjectCell.textContent = '';
-                totalRow.appendChild(totalProjectCell);
-                
-                // Kolom time (kosong)
-                const totalTimeCell = document.createElement('td');
-                totalTimeCell.textContent = '';
-                totalRow.appendChild(totalTimeCell);
-                
-                // Hitung total untuk setiap tanggal
-                dateRange.forEach(date => {
-                    const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
-                    let totalVolume = 0;
-                    
-                    Object.keys(groupedData[plant]).forEach(projectName => {
-                        totalVolume += groupedData[plant][projectName].volumes[dateKey] || 0;
-                    });
-                    
-                    const totalCell = document.createElement('td');
-                    totalCell.textContent = totalVolume > 0 ? totalVolume : '';
-                    totalRow.appendChild(totalCell);
-                });
-                
-                summaryDetailBody.appendChild(totalRow);
-            });
-            
-            // Jika tidak ada data
-            if (Object.keys(groupedData).length === 0) {
-                const noDataRow = document.createElement('tr');
-                const noDataCell = document.createElement('td');
-                noDataCell.colSpan = dateRange.length + 3;
-                noDataCell.textContent = 'No data available for the selected filters';
-                noDataCell.style.textAlign = 'center';
-                noDataRow.appendChild(noDataCell);
-                summaryDetailBody.appendChild(noDataRow);
-            }
-        }
-        
-        // Fungsi untuk memformat tanggal untuk tabel (DD/MM/YYYY)
-        function formatDateForTable(dateString) {
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-        
         // Render charts
         function renderCharts() {
             const startDateValue = chartStartDate.value;
             const endDateValue = chartEndDate.value;
             const plants = ['Manukan', 'Manyar', 'Gempol', 'Krian', 'Kediri', 'Denpasar2', 'Gianyar'];
-            const timePeriods = ['morning', 'afternoon', 'evening', 'night'];
-            // Calculate data for charts
+            
             const plantVolumes = {};
             const shiftVolumes = {
                 morning: 0,
@@ -1840,9 +1921,10 @@
                 evening: 0,
                 night: 0
             };
+            
             plants.forEach(plant => {
                 let plantSchedules = schedules.filter(schedule => schedule.plant === plant);
-                // Apply date range filter
+                
                 if (startDateValue && endDateValue) {
                     plantSchedules = plantSchedules.filter(schedule => {
                         const scheduleDate = new Date(schedule.date);
@@ -1851,19 +1933,21 @@
                         return scheduleDate >= startDate && scheduleDate <= endDate;
                     });
                 }
+                
                 plantVolumes[plant] = plantSchedules.reduce((sum, schedule) => sum + schedule.volume, 0);
                 plantSchedules.forEach(schedule => {
                     const period = getTimePeriod(schedule.time);
                     shiftVolumes[period] += schedule.volume;
                 });
             });
-            // Destroy existing charts if they exist
+            
             if (plantVolumeChart) {
                 plantVolumeChart.destroy();
             }
             if (shiftVolumeChart) {
                 shiftVolumeChart.destroy();
             }
+            
             // Plant Volume Chart
             const plantCtx = document.getElementById('plantVolumeChart').getContext('2d');
             plantVolumeChart = new Chart(plantCtx, {
@@ -1900,6 +1984,7 @@
                     }
                 }
             });
+            
             // Shift Volume Chart
             const shiftCtx = document.getElementById('shiftVolumeChart').getContext('2d');
             shiftVolumeChart = new Chart(shiftCtx, {
@@ -1941,67 +2026,15 @@
                 }
             });
         }
-        // Edit schedule
-        function editSchedule(id) {
-            const schedule = schedules.find(s => s.id === id);
-            if (!schedule) return;
-            document.getElementById('project-name').value = schedule.projectName;
-            document.getElementById('plant').value = schedule.plant;
-            document.getElementById('volume').value = schedule.volume;
-            document.getElementById('time').value = schedule.time;
-            document.getElementById('notes').value = schedule.notes || '';
-            if (schedule.isDaily) {
-                dailyScheduleCheckbox.checked = true;
-                singleDateDiv.classList.add('hidden');
-                dateRangeDiv.classList.remove('hidden');
-                document.getElementById('start-date').value = schedule.date;
-                document.getElementById('end-date').value = schedule.date;
-            } else {
-                dailyScheduleCheckbox.checked = false;
-                singleDateDiv.classList.remove('hidden');
-                dateRangeDiv.classList.add('hidden');
-                document.getElementById('date').value = schedule.date;
-            }
-            // Remove the schedule being edited
-            deleteSchedule(id, false);
-            // Switch to input section
-            document.querySelector('.nav-link[data-target="input-section"]').click();
-        }
-        // Delete schedule
-        function deleteSchedule(id, confirmDelete = true) {
-            if (confirmDelete && !confirm('Are you sure you want to delete this schedule?')) {
-                return;
-            }
-            schedules = schedules.filter(schedule => schedule.id !== id);
-            saveSchedules();
-            renderScheduleTable();
-            renderSummaryDetail(); // Update summary detail juga
-        }
-        // Save schedules to localStorage
-        function saveSchedules() {
-            localStorage.setItem('schedules', JSON.stringify(schedules));
-        }
-        // Format date to standard format
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-        }
 
-        // Fungsi untuk mengonversi data ke format CSV
-        function convertToCSV(data) {
+        // Fungsi untuk mengonversi data ke format CSV dengan kolom terpisah
+        function convertToCSV(data, headers) {
             if (!data || data.length === 0) return '';
-            const headers = Object.keys(data[0]);
+            
             const headerRow = headers.join(',');
             const bodyRows = data.map(row => {
                 return headers.map(header => {
-                    let value = row[header];
-                    // Tangani nilai null/undefined
-                    if (value === null || value === undefined) value = '';
-                    // Tangani nilai string yang mengandung koma atau petik
+                    let value = row[header] || '';
                     if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
                         value = '"' + value.replace(/"/g, '""') + '"';
                     }
@@ -2025,14 +2058,11 @@
                 document.body.removeChild(link);
             } else {
                 alert('Browser tidak mendukung fitur download otomatis. Silakan salin data dan simpan sebagai file CSV.');
-                // Alternatif untuk browser lama bisa ditambahkan di sini
             }
         }
 
-        // Event listener untuk tombol export
+        // Event listener untuk tombol export Schedule Detail
         document.getElementById('export-excel-btn').addEventListener('click', function() {
-            // Ambil data dari tabel yang ditampilkan
-            // Ambil filter aktif saat ini
             const activePlant = document.querySelector('.plant-tab.active').getAttribute('data-plant');
             const filterStartDateValue = filterStartDate.value;
             const filterEndDateValue = filterEndDate.value;
@@ -2041,7 +2071,6 @@
 
             let filteredSchedules = schedules;
 
-            // Terapkan filter seperti pada renderScheduleTable
             if (activePlant !== 'all') {
                 filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
             }
@@ -2063,7 +2092,6 @@
                 });
             }
 
-            // Urutkan data sebelum diexport
             filteredSchedules.sort((a, b) => {
                 const dateA = new Date(a.date + ' ' + a.time);
                 const dateB = new Date(b.date + ' ' + b.time);
@@ -2075,41 +2103,121 @@
                 return;
             }
 
-            // Siapkan data untuk CSV, sesuaikan dengan kolom tabel
-            const csvData = filteredSchedules.map(schedule => ({
-                No: '', // Nomor akan diisi saat render, biarkan kosong untuk export
-                'Project Name': schedule.projectName,
-                Plant: schedule.plant,
+            // Siapkan data untuk CSV dengan kolom terpisah
+            const headers = ['No', 'Project Name', 'Plant', 'Volume (m³)', 'Day', 'Date', 'Time', 'Time Period', 'Notes'];
+            
+            const csvData = filteredSchedules.map((schedule, index) => ({
+                'No': index + 1,
+                'Project Name': schedule.projectName + (schedule.isDaily ? ' (Daily)' : ''),
+                'Plant': schedule.plant,
                 'Volume (m³)': schedule.volume,
-                Day: getDayName(schedule.date), // Kolom baru
-                Date: formatDate(schedule.date),
-                Time: schedule.time,
+                'Day': getDayName(schedule.date),
+                'Date': formatDate(schedule.date),
+                'Time': schedule.time,
                 'Time Period': getTimePeriodLabel(getTimePeriod(schedule.time)),
-                Notes: schedule.notes || '-',
-                // Kolom Actions tidak perlu diekspor
+                'Notes': schedule.notes || '-'
             }));
 
-            // Tambahkan nomor urut ke data CSV
-            csvData.forEach((row, index) => {
-                row.No = index + 1;
-            });
-
-            const csvString = convertToCSV(csvData);
-            const filename = `Monitoring_Schedule_${new Date().toISOString().slice(0, 10)}.csv`;
+            const csvString = convertToCSV(csvData, headers);
+            const filename = `Schedule_Detail_${new Date().toISOString().slice(0, 10)}.csv`;
             downloadCSV(csvString, filename);
         });
 
         // Event listener untuk export Summary Detail
         exportSummaryDetailBtn.addEventListener('click', function() {
-            // Implementasi export untuk Summary Detail
-            alert('Export functionality for Summary Detail will be implemented here');
+            const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active').getAttribute('data-plant');
+            const startDateValue = summaryDetailStartDate.value;
+            const endDateValue = summaryDetailEndDate.value;
+            const filterPlantValue = summaryDetailFilterPlant.value;
+            const filterTimeValue = summaryDetailFilterTime.value;
+            
+            let filteredSchedules = schedules;
+            
+            if (activePlant !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
+            }
+            
+            if (startDateValue && endDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.date);
+                    const startDate = new Date(startDateValue);
+                    const endDate = new Date(endDateValue);
+                    return scheduleDate >= startDate && scheduleDate <= endDate;
+                });
+            }
+            
+            if (filterPlantValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
+            }
+            
+            if (filterTimeValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    return period === filterTimeValue;
+                });
+            }
+            
+            if (filteredSchedules.length === 0) {
+                alert('Tidak ada data untuk diekspor.');
+                return;
+            }
+
+            const dateRange = getDateRange(startDateValue, endDateValue);
+            const groupedData = groupDataByPlantAndProject(filteredSchedules, dateRange);
+            
+            const headers = ['Plant', 'Project Name', 'Time', ...dateRange.map(date => 
+                formatDateForTable(date.toISOString().split('T')[0])
+            )];
+            
+            const csvData = [];
+            
+            Object.keys(groupedData).sort().forEach(plant => {
+                Object.keys(groupedData[plant]).sort().forEach(projectName => {
+                    const rowData = {
+                        'Plant': plant,
+                        'Project Name': projectName + (groupedData[plant][projectName].isDaily ? ' (Daily)' : ''),
+                        'Time': groupedData[plant][projectName].time
+                    };
+                    
+                    dateRange.forEach(date => {
+                        const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                        rowData[dateKey] = groupedData[plant][projectName].volumes[dateKey] || '';
+                    });
+                    
+                    csvData.push(rowData);
+                });
+                
+                const totalRow = {
+                    'Plant': plant + ' Total',
+                    'Project Name': '',
+                    'Time': ''
+                };
+                
+                dateRange.forEach(date => {
+                    const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                    let totalVolume = 0;
+                    
+                    Object.keys(groupedData[plant]).forEach(projectName => {
+                        totalVolume += groupedData[plant][projectName].volumes[dateKey] || 0;
+                    });
+                    
+                    totalRow[dateKey] = totalVolume > 0 ? totalVolume : '';
+                });
+                
+                csvData.push(totalRow);
+                csvData.push({});
+            });
+
+            const csvString = convertToCSV(csvData, headers);
+            const filename = `Summary_Detail_${new Date().toISOString().slice(0, 10)}.csv`;
+            downloadCSV(csvString, filename);
         });
 
         // Initial render
         loadDailyTargets();
         renderScheduleTable();
         renderSummary();
-        renderSummaryDetail(); // Render summary detail juga
+        renderSummaryDetail();
         renderCharts();
     </script>
 </body>
