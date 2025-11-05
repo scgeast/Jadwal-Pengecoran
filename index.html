@@ -639,6 +639,47 @@
             height: 300px;
             position: relative;
         }
+        /* Tambahan CSS untuk Summary Detail */
+        .summary-detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .summary-detail-table th, .summary-detail-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.8rem;
+        }
+        .summary-detail-table th {
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+        }
+        .summary-detail-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .plant-header {
+            background-color: #e3f2fd !important;
+            color: var(--primary) !important;
+            font-weight: bold;
+        }
+        .total-row {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .daily-indicator {
+            color: #e67e22;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
         @media (max-width: 1200px) {
             .single-row-form {
                 grid-template-columns: 1fr 1fr;
@@ -778,13 +819,19 @@
                     <i class="fas fa-plus-circle"></i>
                     <span>Schedule Input</span>
                 </a></li>
+                <!-- Ganti nama tab Monitoring menjadi Schedule Detail -->
                 <li><a href="#" class="nav-link" data-target="monitoring-section">
                     <i class="fas fa-eye"></i>
-                    <span>Monitoring</span>
+                    <span>Schedule Detail</span>
                 </a></li>
                 <li><a href="#" class="nav-link" data-target="summary-section">
                     <i class="fas fa-chart-bar"></i>
                     <span>Summary</span>
+                </a></li>
+                <!-- Tambah tab baru Summary Detail -->
+                <li><a href="#" class="nav-link" data-target="summary-detail-section">
+                    <i class="fas fa-table"></i>
+                    <span>Summary Detail</span>
                 </a></li>
                 <li><a href="#" class="nav-link" data-target="chart-section">
                     <i class="fas fa-chart-pie"></i>
@@ -853,11 +900,11 @@
                 </form>
             </div>
         </section>
-        <!-- Monitoring Section -->
+        <!-- Schedule Detail Section (sebelumnya Monitoring) -->
         <section id="monitoring-section" class="content-section hidden">
             <div class="card">
                 <h2>
-                    <span><i class="fas fa-eye"></i> Pouring Schedule Monitoring</span>
+                    <span><i class="fas fa-eye"></i> Pouring Schedule Detail</span>
                     <button id="export-excel-btn" class="export-btn" title="Export to Excel">
                         <i class="fas fa-file-excel"></i>
                     </button>
@@ -979,6 +1026,104 @@
                 </div>
             </div>
         </section>
+        <!-- Summary Detail Section (BARU) -->
+        <section id="summary-detail-section" class="content-section hidden">
+            <div class="card">
+                <h2>
+                    <span><i class="fas fa-table"></i> Summary Detail</span>
+                    <button id="export-summary-detail-btn" class="export-btn" title="Export to Excel">
+                        <i class="fas fa-file-excel"></i>
+                    </button>
+                </h2>
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar"></i> Filter by Date Range</label>
+                        <div class="date-range-filter">
+                            <div class="form-group">
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">Start Date</label>
+                                <input type="date" id="summary-detail-start-date">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 0.8rem; color: #7f8c8d;">End Date</label>
+                                <input type="date" id="summary-detail-end-date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="summary-detail-filter-plant"><i class="fas fa-filter"></i> Filter by Plant</label>
+                        <select id="summary-detail-filter-plant">
+                            <option value="all">All Plants</option>
+                            <option value="Manukan">Manukan</option>
+                            <option value="Manyar">Manyar</option>
+                            <option value="Gempol">Gempol</option>
+                            <option value="Krian">Krian</option>
+                            <option value="Kediri">Kediri</option>
+                            <option value="Denpasar2">Denpasar2</option>
+                            <option value="Gianyar">Gianyar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="summary-detail-filter-time"><i class="fas fa-clock"></i> Filter by Time Period</label>
+                        <select id="summary-detail-filter-time">
+                            <option value="all">All Times</option>
+                            <option value="morning">Morning (06:00 - 12:00)</option>
+                            <option value="afternoon">Afternoon (12:01 - 15:00)</option>
+                            <option value="evening">Evening (15:01 - 19:00)</option>
+                            <option value="night">Night (19:01 - 24:00)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="plant-tabs" id="summary-detail-plant-tabs">
+                    <div class="plant-tab active" data-plant="all">
+                        <i class="fas fa-building"></i>
+                        All Plants
+                    </div>
+                    <div class="plant-tab" data-plant="Manukan">
+                        <i class="fas fa-industry"></i>
+                        Manukan
+                    </div>
+                    <div class="plant-tab" data-plant="Manyar">
+                        <i class="fas fa-industry"></i>
+                        Manyar
+                    </div>
+                    <div class="plant-tab" data-plant="Gempol">
+                        <i class="fas fa-industry"></i>
+                        Gempol
+                    </div>
+                    <div class="plant-tab" data-plant="Krian">
+                        <i class="fas fa-industry"></i>
+                        Krian
+                    </div>
+                    <div class="plant-tab" data-plant="Kediri">
+                        <i class="fas fa-industry"></i>
+                        Kediri
+                    </div>
+                    <div class="plant-tab" data-plant="Denpasar2">
+                        <i class="fas fa-industry"></i>
+                        Denpasar2
+                    </div>
+                    <div class="plant-tab" data-plant="Gianyar">
+                        <i class="fas fa-industry"></i>
+                        Gianyar
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="summary-detail-table" id="summary-detail-table">
+                        <thead>
+                            <tr>
+                                <th>Plant</th>
+                                <th>Project Name</th>
+                                <th>Time</th>
+                                <!-- Kolom tanggal akan di-generate secara dinamis -->
+                            </tr>
+                        </thead>
+                        <tbody id="summary-detail-body">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
         <!-- Chart Section -->
         <section id="chart-section" class="content-section hidden">
             <div class="card">
@@ -1053,6 +1198,16 @@
         // Chart instances
         let plantVolumeChart = null;
         let shiftVolumeChart = null;
+        
+        // DOM Elements untuk Summary Detail
+        const summaryDetailStartDate = document.getElementById('summary-detail-start-date');
+        const summaryDetailEndDate = document.getElementById('summary-detail-end-date');
+        const summaryDetailFilterPlant = document.getElementById('summary-detail-filter-plant');
+        const summaryDetailFilterTime = document.getElementById('summary-detail-filter-time');
+        const summaryDetailPlantTabs = document.querySelectorAll('#summary-detail-plant-tabs .plant-tab');
+        const summaryDetailBody = document.getElementById('summary-detail-body');
+        const exportSummaryDetailBtn = document.getElementById('export-summary-detail-btn');
+        
         // Set default date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('date').value = today;
@@ -1064,6 +1219,11 @@
         summaryEndDate.value = today;
         chartStartDate.value = today;
         chartEndDate.value = today;
+        
+        // Set default date untuk Summary Detail
+        summaryDetailStartDate.value = today;
+        summaryDetailEndDate.value = today;
+        
         // Update date only (no time)
         function updateDate() {
             const now = new Date();
@@ -1145,6 +1305,8 @@
                     renderScheduleTable();
                 } else if (target === 'summary-section') {
                     renderSummary();
+                } else if (target === 'summary-detail-section') {
+                    renderSummaryDetail();
                 } else if (target === 'chart-section') {
                     renderCharts();
                 }
@@ -1158,6 +1320,16 @@
                 renderScheduleTable();
             });
         });
+        
+        // Plant tabs untuk Summary Detail
+        summaryDetailPlantTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                summaryDetailPlantTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderSummaryDetail();
+            });
+        });
+        
         // Filter event listeners
         filterStartDate.addEventListener('change', renderScheduleTable);
         filterEndDate.addEventListener('change', renderScheduleTable);
@@ -1169,6 +1341,13 @@
         // Chart date range listeners
         chartStartDate.addEventListener('change', renderCharts);
         chartEndDate.addEventListener('change', renderCharts);
+        
+        // Event listeners untuk Summary Detail
+        summaryDetailStartDate.addEventListener('change', renderSummaryDetail);
+        summaryDetailEndDate.addEventListener('change', renderSummaryDetail);
+        summaryDetailFilterPlant.addEventListener('change', renderSummaryDetail);
+        summaryDetailFilterTime.addEventListener('change', renderSummaryDetail);
+        
         // Form submission
         scheduleForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -1417,6 +1596,236 @@
                 summaryContainer.appendChild(plantCard);
             });
         }
+        
+        // Fungsi untuk merender Summary Detail
+        function renderSummaryDetail() {
+            const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active').getAttribute('data-plant');
+            const startDateValue = summaryDetailStartDate.value;
+            const endDateValue = summaryDetailEndDate.value;
+            const filterPlantValue = summaryDetailFilterPlant.value;
+            const filterTimeValue = summaryDetailFilterTime.value;
+            
+            // Filter data berdasarkan kriteria
+            let filteredSchedules = schedules;
+            
+            // Filter berdasarkan plant
+            if (activePlant !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === activePlant);
+            }
+            
+            // Filter berdasarkan tanggal
+            if (startDateValue && endDateValue) {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const scheduleDate = new Date(schedule.date);
+                    const startDate = new Date(startDateValue);
+                    const endDate = new Date(endDateValue);
+                    return scheduleDate >= startDate && scheduleDate <= endDate;
+                });
+            }
+            
+            // Filter berdasarkan plant dropdown
+            if (filterPlantValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => schedule.plant === filterPlantValue);
+            }
+            
+            // Filter berdasarkan time period
+            if (filterTimeValue !== 'all') {
+                filteredSchedules = filteredSchedules.filter(schedule => {
+                    const period = getTimePeriod(schedule.time);
+                    return period === filterTimeValue;
+                });
+            }
+            
+            // Generate array tanggal dari startDate sampai endDate
+            const dateRange = getDateRange(startDateValue, endDateValue);
+            
+            // Kelompokkan data berdasarkan plant dan project
+            const groupedData = groupDataByPlantAndProject(filteredSchedules, dateRange);
+            
+            // Render tabel
+            renderSummaryDetailTable(groupedData, dateRange);
+        }
+        
+        // Fungsi untuk mendapatkan rentang tanggal
+        function getDateRange(startDate, endDate) {
+            const dates = [];
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            let currentDate = new Date(start);
+            while (currentDate <= end) {
+                dates.push(new Date(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return dates;
+        }
+        
+        // Fungsi untuk mengelompokkan data berdasarkan plant dan project
+        function groupDataByPlantAndProject(schedules, dateRange) {
+            const grouped = {};
+            
+            schedules.forEach(schedule => {
+                const plant = schedule.plant;
+                const projectName = schedule.projectName;
+                const time = schedule.time.substring(0, 5); // Format HH:MM
+                const date = schedule.date;
+                const volume = schedule.volume;
+                const isDaily = schedule.isDaily;
+                
+                if (!grouped[plant]) {
+                    grouped[plant] = {};
+                }
+                
+                if (!grouped[plant][projectName]) {
+                    grouped[plant][projectName] = {
+                        time: time,
+                        volumes: {},
+                        isDaily: isDaily
+                    };
+                }
+                
+                // Jika project sudah ada, pastikan time sama atau gunakan yang pertama
+                if (!grouped[plant][projectName].time) {
+                    grouped[plant][projectName].time = time;
+                }
+                
+                // Tambahkan volume untuk tanggal tertentu
+                const dateKey = formatDateForTable(date);
+                if (!grouped[plant][projectName].volumes[dateKey]) {
+                    grouped[plant][projectName].volumes[dateKey] = 0;
+                }
+                grouped[plant][projectName].volumes[dateKey] += volume;
+            });
+            
+            return grouped;
+        }
+        
+        // Fungsi untuk merender tabel Summary Detail
+        function renderSummaryDetailTable(groupedData, dateRange) {
+            // Kosongkan body tabel
+            summaryDetailBody.innerHTML = '';
+            
+            // Buat header untuk tanggal
+            const headerRow = document.querySelector('#summary-detail-table thead tr');
+            
+            // Hapus kolom tanggal yang sudah ada (selain 3 kolom pertama)
+            while (headerRow.children.length > 3) {
+                headerRow.removeChild(headerRow.lastChild);
+            }
+            
+            // Tambahkan kolom untuk setiap tanggal
+            dateRange.forEach(date => {
+                const dateHeader = document.createElement('th');
+                dateHeader.textContent = formatDateForTable(date.toISOString().split('T')[0]);
+                headerRow.appendChild(dateHeader);
+            });
+            
+            // Render data untuk setiap plant
+            Object.keys(groupedData).sort().forEach(plant => {
+                // Tambahkan baris untuk header plant
+                const plantHeaderRow = document.createElement('tr');
+                plantHeaderRow.className = 'plant-header';
+                const plantHeaderCell = document.createElement('td');
+                plantHeaderCell.textContent = plant;
+                plantHeaderCell.colSpan = dateRange.length + 3; // 3 kolom pertama + tanggal
+                plantHeaderRow.appendChild(plantHeaderCell);
+                summaryDetailBody.appendChild(plantHeaderRow);
+                
+                // Render setiap project dalam plant
+                Object.keys(groupedData[plant]).sort().forEach(projectName => {
+                    const projectRow = document.createElement('tr');
+                    
+                    // Kolom plant (kosong karena sudah ada header plant)
+                    const plantCell = document.createElement('td');
+                    plantCell.textContent = '';
+                    projectRow.appendChild(plantCell);
+                    
+                    // Kolom project name
+                    const projectCell = document.createElement('td');
+                    projectCell.textContent = projectName;
+                    if (groupedData[plant][projectName].isDaily) {
+                        const dailyIndicator = document.createElement('span');
+                        dailyIndicator.className = 'daily-indicator';
+                        dailyIndicator.textContent = '(Daily)';
+                        projectCell.appendChild(dailyIndicator);
+                    }
+                    projectRow.appendChild(projectCell);
+                    
+                    // Kolom time
+                    const timeCell = document.createElement('td');
+                    timeCell.textContent = groupedData[plant][projectName].time;
+                    projectRow.appendChild(timeCell);
+                    
+                    // Kolom volume untuk setiap tanggal
+                    dateRange.forEach(date => {
+                        const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                        const volumeCell = document.createElement('td');
+                        const volume = groupedData[plant][projectName].volumes[dateKey] || '';
+                        volumeCell.textContent = volume;
+                        projectRow.appendChild(volumeCell);
+                    });
+                    
+                    summaryDetailBody.appendChild(projectRow);
+                });
+                
+                // Tambahkan baris total untuk plant
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'total-row';
+                
+                // Kolom plant
+                const totalPlantCell = document.createElement('td');
+                totalPlantCell.textContent = plant + ' Total';
+                totalRow.appendChild(totalPlantCell);
+                
+                // Kolom project name (kosong)
+                const totalProjectCell = document.createElement('td');
+                totalProjectCell.textContent = '';
+                totalRow.appendChild(totalProjectCell);
+                
+                // Kolom time (kosong)
+                const totalTimeCell = document.createElement('td');
+                totalTimeCell.textContent = '';
+                totalRow.appendChild(totalTimeCell);
+                
+                // Hitung total untuk setiap tanggal
+                dateRange.forEach(date => {
+                    const dateKey = formatDateForTable(date.toISOString().split('T')[0]);
+                    let totalVolume = 0;
+                    
+                    Object.keys(groupedData[plant]).forEach(projectName => {
+                        totalVolume += groupedData[plant][projectName].volumes[dateKey] || 0;
+                    });
+                    
+                    const totalCell = document.createElement('td');
+                    totalCell.textContent = totalVolume > 0 ? totalVolume : '';
+                    totalRow.appendChild(totalCell);
+                });
+                
+                summaryDetailBody.appendChild(totalRow);
+            });
+            
+            // Jika tidak ada data
+            if (Object.keys(groupedData).length === 0) {
+                const noDataRow = document.createElement('tr');
+                const noDataCell = document.createElement('td');
+                noDataCell.colSpan = dateRange.length + 3;
+                noDataCell.textContent = 'No data available for the selected filters';
+                noDataCell.style.textAlign = 'center';
+                noDataRow.appendChild(noDataCell);
+                summaryDetailBody.appendChild(noDataRow);
+            }
+        }
+        
+        // Fungsi untuk memformat tanggal untuk tabel (DD/MM/YYYY)
+        function formatDateForTable(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
         // Render charts
         function renderCharts() {
             const startDateValue = chartStartDate.value;
@@ -1566,6 +1975,7 @@
             schedules = schedules.filter(schedule => schedule.id !== id);
             saveSchedules();
             renderScheduleTable();
+            renderSummaryDetail(); // Update summary detail juga
         }
         // Save schedules to localStorage
         function saveSchedules() {
@@ -1689,10 +2099,17 @@
             downloadCSV(csvString, filename);
         });
 
+        // Event listener untuk export Summary Detail
+        exportSummaryDetailBtn.addEventListener('click', function() {
+            // Implementasi export untuk Summary Detail
+            alert('Export functionality for Summary Detail will be implemented here');
+        });
+
         // Initial render
         loadDailyTargets();
         renderScheduleTable();
         renderSummary();
+        renderSummaryDetail(); // Render summary detail juga
         renderCharts();
     </script>
 </body>
