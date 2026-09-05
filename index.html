@@ -49,7 +49,6 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        /* ===== MAIN CONTAINER ===== */
         .app-wrapper {
             display: flex;
             flex: 1;
@@ -73,7 +72,7 @@
             margin-left: var(--sidebar-width);
         }
         
-        /* ===== HEADER MOBILE FRIENDLY ===== */
+        /* ===== HEADER ===== */
         header {
             background: linear-gradient(135deg, #880808 0%, #6a0dad 100%);
             color: white;
@@ -156,7 +155,46 @@
             50% { opacity: 0.2; }
         }
 
-        /* ===== SIDEBAR MOBILE ===== */
+        /* ===== GLOBAL DATE FILTER INDICATOR ===== */
+        .global-filter-info {
+            background: #e8f0fe;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 0.6rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        .global-filter-info i {
+            font-size: 0.6rem;
+        }
+        .global-filter-info .filter-date {
+            font-weight: 600;
+            background: white;
+            padding: 1px 8px;
+            border-radius: 4px;
+            color: var(--dark);
+        }
+        .global-filter-info .clear-filter {
+            color: var(--danger);
+            cursor: pointer;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        .global-filter-info .clear-filter:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        .global-filter-info .clear-filter:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 0;
@@ -180,7 +218,6 @@
             transform: translateX(-100%);
         }
         
-        /* Overlay untuk sidebar di mobile */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -312,7 +349,7 @@
             display: none;
         }
 
-        /* ===== FLOATING TOGGLE BUTTON ===== */
+        /* ===== FLOATING TOGGLE ===== */
         .floating-toggle {
             position: fixed;
             top: calc((var(--header-height) - 32px) / 2);
@@ -375,7 +412,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== NAVIGASI MOBILE ===== */
+        /* ===== NAVIGASI ===== */
         nav {
             background-color: white;
             padding: 0;
@@ -421,7 +458,7 @@
             border-radius: 6px;
         }
 
-        /* ===== CARD MOBILE ===== */
+        /* ===== CARD ===== */
         .card {
             background-color: white;
             border-radius: 8px;
@@ -451,7 +488,7 @@
             padding: 4px 8px;
         }
 
-        /* ===== FORM MOBILE ===== */
+        /* ===== FORM ===== */
         .form-group {
             margin-bottom: 6px;
         }
@@ -547,7 +584,7 @@
             display: none !important;
         }
 
-        /* ===== FILTER MOBILE ===== */
+        /* ===== FILTER ===== */
         .filter-section {
             display: flex;
             flex-direction: column;
@@ -569,7 +606,7 @@
             font-size: 13px;
         }
 
-        /* ===== PLANT TABS MOBILE ===== */
+        /* ===== PLANT TABS ===== */
         .plant-tabs {
             display: flex;
             margin-bottom: 8px;
@@ -606,7 +643,7 @@
             color: white;
         }
 
-        /* ===== TABLE MOBILE ===== */
+        /* ===== TABLE ===== */
         .table-wrapper {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -666,7 +703,7 @@
             color: white;
         }
 
-        /* ===== SUMMARY MOBILE ===== */
+        /* ===== SUMMARY ===== */
         .summary-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -758,7 +795,7 @@
             color: #7f8c8d;
         }
 
-        /* ===== SUMMARY DETAIL MOBILE ===== */
+        /* ===== SUMMARY DETAIL ===== */
         .summary-detail-table {
             width: 100%;
             min-width: 400px;
@@ -797,7 +834,7 @@
             margin-left: 2px;
         }
 
-        /* ===== CHART MOBILE ===== */
+        /* ===== CHART ===== */
         .chart-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -819,7 +856,7 @@
             position: relative;
         }
 
-        /* ===== RESPONSIVE BREAKPOINTS ===== */
+        /* ===== RESPONSIVE ===== */
         @media (min-width: 768px) {
             .container {
                 padding: 10px 16px;
@@ -940,16 +977,11 @@
             .header-text {
                 margin-left: 28px;
             }
+            .global-filter-info {
+                font-size: 0.5rem;
+                padding: 3px 6px;
+            }
         }
-
-        /* ===== UTILITY ===== */
-        .text-center {
-            text-align: center;
-        }
-        .mt-1 { margin-top: 4px; }
-        .mt-2 { margin-top: 8px; }
-        .mb-1 { margin-bottom: 4px; }
-        .mb-2 { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -1080,6 +1112,18 @@
                 </ul>
             </nav>
 
+            <!-- ===== GLOBAL FILTER INFO ===== -->
+            <div class="global-filter-info" id="globalFilterInfo">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Filter Tanggal:</span>
+                <span class="filter-date" id="globalStartDisplay">-</span>
+                <span>s/d</span>
+                <span class="filter-date" id="globalEndDisplay">-</span>
+                <span class="clear-filter" id="clearGlobalFilter">
+                    <i class="fas fa-times-circle"></i> Reset
+                </span>
+            </div>
+
             <!-- ===== INPUT SECTION ===== -->
             <section id="input-section" class="content-section">
                 <div class="card">
@@ -1154,7 +1198,7 @@
                     </h2>
                     <div class="filter-section">
                         <div class="form-group">
-                            <label><i class="fas fa-calendar"></i> Date Range</label>
+                            <label><i class="fas fa-calendar"></i> Date Range (Global)</label>
                             <div class="date-range-filter">
                                 <input type="date" id="filter-start-date" placeholder="Start">
                                 <input type="date" id="filter-end-date" placeholder="End">
@@ -1226,7 +1270,7 @@
                     <h2><i class="fas fa-chart-bar"></i> Pouring Summary</h2>
                     <div class="filter-section">
                         <div class="form-group">
-                            <label><i class="fas fa-calendar"></i> Date Range</label>
+                            <label><i class="fas fa-calendar"></i> Date Range (Global)</label>
                             <div class="date-range-filter">
                                 <input type="date" id="summary-start-date">
                                 <input type="date" id="summary-end-date">
@@ -1248,7 +1292,7 @@
                     </h2>
                     <div class="filter-section">
                         <div class="form-group">
-                            <label><i class="fas fa-calendar"></i> Date Range</label>
+                            <label><i class="fas fa-calendar"></i> Date Range (Global)</label>
                             <div class="date-range-filter">
                                 <input type="date" id="summary-detail-start-date">
                                 <input type="date" id="summary-detail-end-date">
@@ -1313,7 +1357,7 @@
                     <h2><i class="fas fa-chart-pie"></i> Pouring Charts</h2>
                     <div class="filter-section">
                         <div class="form-group">
-                            <label><i class="fas fa-calendar"></i> Date Range</label>
+                            <label><i class="fas fa-calendar"></i> Date Range (Global)</label>
                             <div class="date-range-filter">
                                 <input type="date" id="chart-start-date">
                                 <input type="date" id="chart-end-date">
@@ -1368,6 +1412,12 @@
         let editingScheduleId = null;
         let plantVolumeChart = null;
         let shiftVolumeChart = null;
+        
+        // ============================================================
+        // ===== GLOBAL DATE FILTER =====
+        // ============================================================
+        let globalStartDate = '';
+        let globalEndDate = '';
 
         // ============================================================
         // ===== DOM ELEMENTS =====
@@ -1408,9 +1458,124 @@
         const exportSummaryDetailBtn = document.getElementById('export-summary-detail-btn');
         const migrateBtn = document.getElementById('migrate-data-btn');
         const migrateStatus = document.getElementById('migrate-status');
+        const globalStartDisplay = document.getElementById('globalStartDisplay');
+        const globalEndDisplay = document.getElementById('globalEndDisplay');
+        const clearGlobalFilter = document.getElementById('clearGlobalFilter');
 
         // ============================================================
-        // ===== SIDEBAR TOGGLE (MOBILE FRIENDLY) =====
+        // ===== FUNGSI GLOBAL DATE FILTER =====
+        // ============================================================
+        function updateGlobalFilterDisplay() {
+            if (globalStartDate && globalEndDate) {
+                const start = formatDateDisplay(globalStartDate);
+                const end = formatDateDisplay(globalEndDate);
+                globalStartDisplay.textContent = start;
+                globalEndDisplay.textContent = end;
+                globalStartDisplay.style.color = 'var(--dark)';
+                globalEndDisplay.style.color = 'var(--dark)';
+            } else {
+                globalStartDisplay.textContent = 'Semua';
+                globalEndDisplay.textContent = 'Semua';
+                globalStartDisplay.style.color = '#999';
+                globalEndDisplay.style.color = '#999';
+            }
+        }
+
+        function formatDateDisplay(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        function updateAllDateFilters(startDate, endDate) {
+            globalStartDate = startDate;
+            globalEndDate = endDate;
+            
+            // Update semua input date di semua tab
+            const dateInputs = [
+                { start: filterStartDate, end: filterEndDate },
+                { start: summaryStartDate, end: summaryEndDate },
+                { start: summaryDetailStartDate, end: summaryDetailEndDate },
+                { start: chartStartDate, end: chartEndDate }
+            ];
+            
+            dateInputs.forEach(pair => {
+                if (pair.start) pair.start.value = startDate;
+                if (pair.end) pair.end.value = endDate;
+            });
+            
+            updateGlobalFilterDisplay();
+            renderAll();
+        }
+
+        function clearAllDateFilters() {
+            const today = new Date().toISOString().split('T')[0];
+            globalStartDate = today;
+            globalEndDate = today;
+            
+            const dateInputs = [
+                { start: filterStartDate, end: filterEndDate },
+                { start: summaryStartDate, end: summaryEndDate },
+                { start: summaryDetailStartDate, end: summaryDetailEndDate },
+                { start: chartStartDate, end: chartEndDate }
+            ];
+            
+            dateInputs.forEach(pair => {
+                if (pair.start) pair.start.value = today;
+                if (pair.end) pair.end.value = today;
+            });
+            
+            updateGlobalFilterDisplay();
+            renderAll();
+        }
+
+        function setupDateFilterSync() {
+            const dateFilterPairs = [
+                { start: filterStartDate, end: filterEndDate },
+                { start: summaryStartDate, end: summaryEndDate },
+                { start: summaryDetailStartDate, end: summaryDetailEndDate },
+                { start: chartStartDate, end: chartEndDate }
+            ];
+            
+            dateFilterPairs.forEach(pair => {
+                if (pair.start) {
+                    pair.start.addEventListener('change', function() {
+                        const startDate = this.value;
+                        const endDate = pair.end ? pair.end.value : startDate;
+                        if (startDate && endDate) {
+                            updateAllDateFilters(startDate, endDate);
+                        }
+                    });
+                }
+                if (pair.end) {
+                    pair.end.addEventListener('change', function() {
+                        const startDate = pair.start ? pair.start.value : this.value;
+                        const endDate = this.value;
+                        if (startDate && endDate) {
+                            updateAllDateFilters(startDate, endDate);
+                        }
+                    });
+                }
+            });
+            
+            // Clear filter button
+            clearGlobalFilter.addEventListener('click', function() {
+                clearAllDateFilters();
+            });
+        }
+
+        function getActiveDateRange() {
+            return {
+                startDate: globalStartDate,
+                endDate: globalEndDate
+            };
+        }
+
+        // ============================================================
+        // ===== SIDEBAR TOGGLE =====
         // ============================================================
         function toggleSidebar(show) {
             const isMobile = window.innerWidth < 768;
@@ -1439,7 +1604,6 @@
                     }
                 }
             } else {
-                // Desktop: toggle between collapsed and expanded
                 sidebar.classList.toggle('collapsed');
                 sidebar.classList.toggle('expanded');
                 mainContainer.classList.toggle('expanded');
@@ -1452,10 +1616,9 @@
         });
 
         sidebarClose.addEventListener('click', () => toggleSidebar(false));
-
         sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
 
-        // Touch swipe untuk sidebar di mobile
+        // Touch swipe untuk sidebar
         let touchStartX = 0;
         let touchEndX = 0;
         document.addEventListener('touchstart', (e) => {
@@ -1473,7 +1636,6 @@
             }
         });
 
-        // Close sidebar on resize to desktop
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) {
                 sidebarOverlay.classList.remove('active');
@@ -1781,14 +1943,16 @@
             const activePlant = document.querySelector('#monitoring-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
 
-            if (activePlant !== 'all') {
-                filtered = filtered.filter(s => s.plant === activePlant);
-            }
-            if (filterStartDate.value && filterEndDate.value) {
+            // Filter by global date
+            if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
-                    return d >= new Date(filterStartDate.value) && d <= new Date(filterEndDate.value);
+                    return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                 });
+            }
+
+            if (activePlant !== 'all') {
+                filtered = filtered.filter(s => s.plant === activePlant);
             }
             if (filterPlant.value !== 'all') {
                 filtered = filtered.filter(s => s.plant === filterPlant.value);
@@ -1839,10 +2003,12 @@
 
             plants.forEach(plant => {
                 let plantSchedules = schedules.filter(s => s.plant === plant);
-                if (summaryStartDate.value && summaryEndDate.value) {
+                
+                // Filter by global date
+                if (globalStartDate && globalEndDate) {
                     plantSchedules = plantSchedules.filter(s => {
                         const d = new Date(s.date);
-                        return d >= new Date(summaryStartDate.value) && d <= new Date(summaryEndDate.value);
+                        return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                     });
                 }
 
@@ -1897,13 +2063,15 @@
             const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
 
-            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
-            if (summaryDetailStartDate.value && summaryDetailEndDate.value) {
+            // Filter by global date
+            if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
-                    return d >= new Date(summaryDetailStartDate.value) && d <= new Date(summaryDetailEndDate.value);
+                    return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                 });
             }
+
+            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
             if (summaryDetailFilterPlant.value !== 'all') {
                 filtered = filtered.filter(s => s.plant === summaryDetailFilterPlant.value);
             }
@@ -1911,10 +2079,7 @@
                 filtered = filtered.filter(s => getTimePeriod(s.time) === summaryDetailFilterTime.value);
             }
 
-            const dateRange = getDateRange(
-                summaryDetailStartDate.value || new Date().toISOString().split('T')[0],
-                summaryDetailEndDate.value || new Date().toISOString().split('T')[0]
-            );
+            const dateRange = getDateRange(globalStartDate || new Date().toISOString().split('T')[0], globalEndDate || new Date().toISOString().split('T')[0]);
             const grouped = groupDataByPlantAndProject(filtered, dateRange);
             renderSummaryDetailTable(grouped, dateRange);
         }
@@ -2024,12 +2189,15 @@
 
             plants.forEach(plant => {
                 let ps = schedules.filter(s => s.plant === plant);
-                if (chartStartDate.value && chartEndDate.value) {
+                
+                // Filter by global date
+                if (globalStartDate && globalEndDate) {
                     ps = ps.filter(s => {
                         const d = new Date(s.date);
-                        return d >= new Date(chartStartDate.value) && d <= new Date(chartEndDate.value);
+                        return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                     });
                 }
+                
                 plantVol[plant] = ps.reduce((sum, s) => sum + s.volume, 0);
                 ps.forEach(s => shiftVol[getTimePeriod(s.time)] += s.volume);
             });
@@ -2116,7 +2284,6 @@
             editingScheduleId = id;
             submitBtn.innerHTML = '<i class="fas fa-save"></i> Update';
             document.querySelector('.nav-link[data-target="input-section"]').click();
-            // Scroll ke form
             document.getElementById('input-section').scrollIntoView({ behavior: 'smooth' });
         };
 
@@ -2253,13 +2420,15 @@
         exportExcelBtn.addEventListener('click', function() {
             const activePlant = document.querySelector('#monitoring-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
-            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
-            if (filterStartDate.value && filterEndDate.value) {
+
+            if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
-                    return d >= new Date(filterStartDate.value) && d <= new Date(filterEndDate.value);
+                    return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                 });
             }
+
+            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
             if (filterPlant.value !== 'all') filtered = filtered.filter(s => s.plant === filterPlant.value);
             if (filterTime.value !== 'all') filtered = filtered.filter(s => getTimePeriod(s.time) === filterTime.value);
 
@@ -2283,22 +2452,21 @@
         exportSummaryDetailBtn.addEventListener('click', function() {
             const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
-            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
-            if (summaryDetailStartDate.value && summaryDetailEndDate.value) {
+
+            if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
-                    return d >= new Date(summaryDetailStartDate.value) && d <= new Date(summaryDetailEndDate.value);
+                    return d >= new Date(globalStartDate) && d <= new Date(globalEndDate);
                 });
             }
+
+            if (activePlant !== 'all') filtered = filtered.filter(s => s.plant === activePlant);
             if (summaryDetailFilterPlant.value !== 'all') filtered = filtered.filter(s => s.plant === summaryDetailFilterPlant.value);
             if (summaryDetailFilterTime.value !== 'all') filtered = filtered.filter(s => getTimePeriod(s.time) === summaryDetailFilterTime.value);
 
             if (filtered.length === 0) { alert('Tidak ada data'); return; }
 
-            const dateRange = getDateRange(
-                summaryDetailStartDate.value || new Date().toISOString().split('T')[0],
-                summaryDetailEndDate.value || new Date().toISOString().split('T')[0]
-            );
+            const dateRange = getDateRange(globalStartDate || new Date().toISOString().split('T')[0], globalEndDate || new Date().toISOString().split('T')[0]);
             const grouped = groupDataByPlantAndProject(filtered, dateRange);
             const headers = ['Plant', 'Project Name', 'Time', ...dateRange.map(d => formatDateForTable(d.toISOString().split('T')[0]))];
             const csvData = [];
@@ -2340,7 +2508,6 @@
                 link.classList.add('active');
                 contentSections.forEach(s => s.classList.add('hidden'));
                 document.getElementById(target).classList.remove('hidden');
-                // Close sidebar on mobile after navigation
                 if (window.innerWidth < 768) toggleSidebar(false);
                 if (target === 'monitoring-section') renderScheduleTable();
                 else if (target === 'summary-section') renderSummary();
@@ -2371,18 +2538,11 @@
         // ============================================================
         // ===== FILTER EVENT LISTENERS =====
         // ============================================================
-        filterStartDate.addEventListener('change', renderScheduleTable);
-        filterEndDate.addEventListener('change', renderScheduleTable);
+        // Plant filter
         filterPlant.addEventListener('change', renderScheduleTable);
         filterTime.addEventListener('change', renderScheduleTable);
-        summaryStartDate.addEventListener('change', renderSummary);
-        summaryEndDate.addEventListener('change', renderSummary);
-        summaryDetailStartDate.addEventListener('change', renderSummaryDetail);
-        summaryDetailEndDate.addEventListener('change', renderSummaryDetail);
         summaryDetailFilterPlant.addEventListener('change', renderSummaryDetail);
         summaryDetailFilterTime.addEventListener('change', renderSummaryDetail);
-        chartStartDate.addEventListener('change', renderCharts);
-        chartEndDate.addEventListener('change', renderCharts);
 
         // ============================================================
         // ===== DAILY SCHEDULE CHECKBOX =====
@@ -2418,6 +2578,9 @@
         // ===== SET DEFAULT DATES =====
         // ============================================================
         const today = new Date().toISOString().split('T')[0];
+        globalStartDate = today;
+        globalEndDate = today;
+        
         document.getElementById('date').value = today;
         document.getElementById('start-date').value = today;
         document.getElementById('end-date').value = today;
@@ -2435,6 +2598,10 @@
         // ============================================================
         updateDate();
         setInterval(updateDate, 60000);
+
+        // Setup global date filter sync
+        setupDateFilterSync();
+        updateGlobalFilterDisplay();
 
         async function init() {
             await loadDailyTargetsFromFirestore();
