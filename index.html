@@ -211,10 +211,10 @@
             transform: translateX(-100%);
             -webkit-overflow-scrolling: touch;
         }
-        .sidebar.expanded {
+        .sidebar.open {
             transform: translateX(0);
         }
-        .sidebar.collapsed {
+        .sidebar.closed {
             transform: translateX(-100%);
         }
         
@@ -258,9 +258,10 @@
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 4px;
+            touch-action: manipulation;
         }
-        .sidebar-close:hover {
-            background: rgba(255,255,255,0.1);
+        .sidebar-close:active {
+            transform: scale(0.9);
         }
         .sidebar-content {
             padding: 12px 16px;
@@ -319,19 +320,12 @@
             background: var(--secondary);
             color: white;
         }
-        .save-targets:hover {
-            background: #2980b9;
-        }
         .save-targets:active {
             transform: scale(0.97);
         }
         .migrate-btn {
             background: linear-gradient(135deg, #e67e22, #d35400);
             color: white;
-        }
-        .migrate-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(211, 84, 0, 0.4);
         }
         .migrate-btn:active {
             transform: scale(0.97);
@@ -349,7 +343,7 @@
             display: none;
         }
 
-        /* ===== FLOATING TOGGLE ===== */
+        /* ===== FLOATING TOGGLE BUTTON ===== */
         .floating-toggle {
             position: fixed;
             top: calc((var(--header-height) - 32px) / 2);
@@ -368,12 +362,15 @@
             backdrop-filter: blur(4px);
             touch-action: manipulation;
             -webkit-touch-callout: none;
+            transition: background 0.2s;
         }
         .floating-toggle:active {
             transform: scale(0.9);
+            background: rgba(0,0,0,0.4);
         }
         .floating-toggle i {
             font-size: 0.9rem;
+            pointer-events: none;
         }
 
         /* ===== LOADING ===== */
@@ -903,7 +900,7 @@
                 width: var(--sidebar-collapsed-width);
                 position: fixed;
             }
-            .sidebar.expanded {
+            .sidebar.open {
                 width: var(--sidebar-width);
             }
             .sidebar-overlay {
@@ -998,7 +995,7 @@
     </div>
 
     <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar closed" id="sidebar">
         <div class="sidebar-header">
             <h3><i class="fas fa-bullseye"></i> Daily Targets</h3>
             <button class="sidebar-close" id="sidebarClose">
@@ -1412,10 +1409,6 @@
         let editingScheduleId = null;
         let plantVolumeChart = null;
         let shiftVolumeChart = null;
-        
-        // ============================================================
-        // ===== GLOBAL DATE FILTER =====
-        // ============================================================
         let globalStartDate = '';
         let globalEndDate = '';
 
@@ -1463,6 +1456,63 @@
         const clearGlobalFilter = document.getElementById('clearGlobalFilter');
 
         // ============================================================
+        // ===== SIDEBAR TOGGLE (HANYA VIA TOMBOL) =====
+        // ============================================================
+        function toggleSidebar(open) {
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+                if (open === true) {
+                    sidebar.classList.remove('closed');
+                    sidebar.classList.add('open');
+                    sidebarOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                } else if (open === false) {
+                    sidebar.classList.remove('open');
+                    sidebar.classList.add('closed');
+                    sidebarOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    // Toggle
+                    if (sidebar.classList.contains('open')) {
+                        sidebar.classList.remove('open');
+                        sidebar.classList.add('closed');
+                        sidebarOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    } else {
+                        sidebar.classList.remove('closed');
+                        sidebar.classList.add('open');
+                        sidebarOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+            } else {
+                // Desktop: toggle between collapsed and expanded
+                sidebar.classList.toggle('closed');
+                sidebar.classList.toggle('open');
+                mainContainer.classList.toggle('expanded');
+            }
+        }
+
+        // Event: Tombol hamburger
+        floatingToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSidebar();
+        });
+
+        // Event: Tombol close di sidebar
+        sidebarClose.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleSidebar(false);
+        });
+
+        // Event: Klik overlay untuk menutup
+        sidebarOverlay.addEventListener('click', function() {
+            toggleSidebar(false);
+        });
+
+        // ============================================================
         // ===== FUNGSI GLOBAL DATE FILTER =====
         // ============================================================
         function updateGlobalFilterDisplay() {
@@ -1494,7 +1544,6 @@
             globalStartDate = startDate;
             globalEndDate = endDate;
             
-            // Update semua input date di semua tab
             const dateInputs = [
                 { start: filterStartDate, end: filterEndDate },
                 { start: summaryStartDate, end: summaryEndDate },
@@ -1561,7 +1610,6 @@
                 }
             });
             
-            // Clear filter button
             clearGlobalFilter.addEventListener('click', function() {
                 clearAllDateFilters();
             });
@@ -1573,77 +1621,6 @@
                 endDate: globalEndDate
             };
         }
-
-        // ============================================================
-        // ===== SIDEBAR TOGGLE =====
-        // ============================================================
-        function toggleSidebar(show) {
-            const isMobile = window.innerWidth < 768;
-            if (isMobile) {
-                if (show === true) {
-                    sidebar.classList.add('expanded');
-                    sidebar.classList.remove('collapsed');
-                    sidebarOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                } else if (show === false) {
-                    sidebar.classList.remove('expanded');
-                    sidebar.classList.add('collapsed');
-                    sidebarOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                } else {
-                    if (sidebar.classList.contains('expanded')) {
-                        sidebar.classList.remove('expanded');
-                        sidebar.classList.add('collapsed');
-                        sidebarOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    } else {
-                        sidebar.classList.add('expanded');
-                        sidebar.classList.remove('collapsed');
-                        sidebarOverlay.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    }
-                }
-            } else {
-                sidebar.classList.toggle('collapsed');
-                sidebar.classList.toggle('expanded');
-                mainContainer.classList.toggle('expanded');
-            }
-        }
-
-        floatingToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleSidebar();
-        });
-
-        sidebarClose.addEventListener('click', () => toggleSidebar(false));
-        sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
-
-        // Touch swipe untuk sidebar
-        let touchStartX = 0;
-        let touchEndX = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchEndX - touchStartX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && !sidebar.classList.contains('expanded')) {
-                    toggleSidebar(true);
-                } else if (diff < 0 && sidebar.classList.contains('expanded')) {
-                    toggleSidebar(false);
-                }
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768) {
-                sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-                sidebar.classList.remove('expanded');
-                sidebar.classList.add('collapsed');
-            }
-        });
 
         // ============================================================
         // ===== FUNGSI LOADING =====
@@ -1943,7 +1920,6 @@
             const activePlant = document.querySelector('#monitoring-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
 
-            // Filter by global date
             if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
@@ -2004,7 +1980,6 @@
             plants.forEach(plant => {
                 let plantSchedules = schedules.filter(s => s.plant === plant);
                 
-                // Filter by global date
                 if (globalStartDate && globalEndDate) {
                     plantSchedules = plantSchedules.filter(s => {
                         const d = new Date(s.date);
@@ -2063,7 +2038,6 @@
             const activePlant = document.querySelector('#summary-detail-plant-tabs .plant-tab.active')?.getAttribute('data-plant') || 'all';
             let filtered = schedules;
 
-            // Filter by global date
             if (globalStartDate && globalEndDate) {
                 filtered = filtered.filter(s => {
                     const d = new Date(s.date);
@@ -2190,7 +2164,6 @@
             plants.forEach(plant => {
                 let ps = schedules.filter(s => s.plant === plant);
                 
-                // Filter by global date
                 if (globalStartDate && globalEndDate) {
                     ps = ps.filter(s => {
                         const d = new Date(s.date);
@@ -2538,7 +2511,6 @@
         // ============================================================
         // ===== FILTER EVENT LISTENERS =====
         // ============================================================
-        // Plant filter
         filterPlant.addEventListener('change', renderScheduleTable);
         filterTime.addEventListener('change', renderScheduleTable);
         summaryDetailFilterPlant.addEventListener('change', renderSummaryDetail);
@@ -2599,7 +2571,6 @@
         updateDate();
         setInterval(updateDate, 60000);
 
-        // Setup global date filter sync
         setupDateFilterSync();
         updateGlobalFilterDisplay();
 
@@ -2612,3 +2583,4 @@
     </script>
 </body>
 </html>
+            
