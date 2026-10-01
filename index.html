@@ -10,9 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
         :root {
@@ -1049,7 +1048,7 @@
             </button>
             <button class="migrate-btn" id="migrate-data-btn">
                 <i class="fas fa-cloud-upload-alt"></i>
-                Migrate Data to Firebase
+                Migrate Data to Supabase
             </button>
             <div id="migrate-status">
                 <i class="fas fa-check-circle"></i> Data migrated successfully!
@@ -1070,7 +1069,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <div class="status-online" title="Connected to Firebase">
+                <div class="status-online" title="Connected to Supabase">
                     <i class="fas fa-circle"></i>
                     <span>Online</span>
                 </div>
@@ -1383,20 +1382,12 @@
 
     <script>
         // ============================================================
-        // ===== KONFIGURASI FIREBASE =====
+        // ===== KONFIGURASI SUPABASE (GANTI BAGIAN INI) =====
         // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyAurVDZrxG_SuDBNW1CgDAdcGohl6lYi3c",
-            authDomain: "order-monitoring-b3bb2.firebaseapp.com",
-            projectId: "order-monitoring-b3bb2",
-            storageBucket: "order-monitoring-b3bb2.firebasestorage.app",
-            messagingSenderId: "762661501848",
-            appId: "1:762661501848:web:5686cac2c0584881ec09ed",
-            measurementId: "G-LRQY5W0VKJ"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const SUPABASE_URL = 'https://ruowsmgwlpmyxvxwaqna.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_px6eFpmYMf_G4cpSdOXZvg_pKB_LS8F';
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
         // ===== VARIABEL GLOBAL =====
@@ -1456,7 +1447,7 @@
         const clearGlobalFilter = document.getElementById('clearGlobalFilter');
 
         // ============================================================
-        // ===== SIDEBAR TOGGLE (HANYA VIA TOMBOL) =====
+        // ===== SIDEBAR TOGGLE =====
         // ============================================================
         function toggleSidebar(open) {
             const isMobile = window.innerWidth < 768;
@@ -1473,7 +1464,6 @@
                     sidebarOverlay.classList.remove('active');
                     document.body.style.overflow = '';
                 } else {
-                    // Toggle
                     if (sidebar.classList.contains('open')) {
                         sidebar.classList.remove('open');
                         sidebar.classList.add('closed');
@@ -1487,27 +1477,23 @@
                     }
                 }
             } else {
-                // Desktop: toggle between collapsed and expanded
                 sidebar.classList.toggle('closed');
                 sidebar.classList.toggle('open');
                 mainContainer.classList.toggle('expanded');
             }
         }
 
-        // Event: Tombol hamburger
         floatingToggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             toggleSidebar();
         });
 
-        // Event: Tombol close di sidebar
         sidebarClose.addEventListener('click', function(e) {
             e.stopPropagation();
             toggleSidebar(false);
         });
 
-        // Event: Klik overlay untuk menutup
         sidebarOverlay.addEventListener('click', function() {
             toggleSidebar(false);
         });
@@ -1615,13 +1601,6 @@
             });
         }
 
-        function getActiveDateRange() {
-            return {
-                startDate: globalStartDate,
-                endDate: globalEndDate
-            };
-        }
-
         // ============================================================
         // ===== FUNGSI LOADING =====
         // ============================================================
@@ -1634,40 +1613,53 @@
         }
 
         // ============================================================
-        // ===== FUNGSI FIREBASE CRUD =====
+        // ===== FUNGSI SUPABASE CRUD =====
         // ============================================================
-        async function loadSchedulesFromFirestore() {
+        async function loadSchedulesFromSupabase() {
             showLoading();
             try {
-                const snapshot = await db.collection('schedules').orderBy('date', 'asc').get();
-                schedules = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    schedules.push({
-                        id: doc.id,
-                        projectName: data.projectName,
-                        plant: data.plant,
-                        volume: data.volume,
-                        date: data.date,
-                        time: data.time,
-                        notes: data.notes || '',
-                        isDaily: data.isDaily || false
-                    });
-                });
+                const { data, error } = await supabaseClient
+                    .from('schedules')
+                    .select('*')
+                    .order('date', { ascending: true });
+                if (error) throw error;
+                schedules = data.map(row => ({
+                    id: row.id,
+                    projectName: row.project_name,
+                    plant: row.plant,
+                    volume: row.volume,
+                    date: row.date,
+                    time: row.time,
+                    notes: row.notes || '',
+                    isDaily: row.is_daily || false
+                }));
                 console.log('Data loaded:', schedules.length, 'records');
             } catch (error) {
                 console.error('Error loading schedules:', error);
-                alert('Gagal memuat data dari Firestore.');
+                alert('Gagal memuat data dari Supabase.');
             }
             hideLoading();
             renderAll();
         }
 
-        async function saveScheduleToFirestore(scheduleData) {
+        async function saveScheduleToSupabase(scheduleData) {
             showLoading();
             try {
-                const docRef = await db.collection('schedules').add(scheduleData);
-                return docRef.id;
+                const dbData = {
+                    project_name: scheduleData.projectName,
+                    plant: scheduleData.plant,
+                    volume: scheduleData.volume,
+                    date: scheduleData.date,
+                    time: scheduleData.time,
+                    notes: scheduleData.notes,
+                    is_daily: scheduleData.isDaily
+                };
+                const { data, error } = await supabaseClient
+                    .from('schedules')
+                    .insert([dbData])
+                    .select();
+                if (error) throw error;
+                return data[0].id;
             } catch (error) {
                 console.error('Error saving:', error);
                 alert('Gagal menyimpan data.');
@@ -1677,10 +1669,23 @@
             }
         }
 
-        async function updateScheduleInFirestore(id, scheduleData) {
+        async function updateScheduleInSupabase(id, scheduleData) {
             showLoading();
             try {
-                await db.collection('schedules').doc(id).update(scheduleData);
+                const dbData = {
+                    project_name: scheduleData.projectName,
+                    plant: scheduleData.plant,
+                    volume: scheduleData.volume,
+                    date: scheduleData.date,
+                    time: scheduleData.time,
+                    notes: scheduleData.notes,
+                    is_daily: scheduleData.isDaily
+                };
+                const { error } = await supabaseClient
+                    .from('schedules')
+                    .update(dbData)
+                    .eq('id', id);
+                if (error) throw error;
                 return true;
             } catch (error) {
                 console.error('Error updating:', error);
@@ -1691,10 +1696,14 @@
             }
         }
 
-        async function deleteScheduleFromFirestore(id) {
+        async function deleteScheduleFromSupabase(id) {
             showLoading();
             try {
-                await db.collection('schedules').doc(id).delete();
+                const { error } = await supabaseClient
+                    .from('schedules')
+                    .delete()
+                    .eq('id', id);
+                if (error) throw error;
                 return true;
             } catch (error) {
                 console.error('Error deleting:', error);
@@ -1705,13 +1714,28 @@
             }
         }
 
-        async function loadDailyTargetsFromFirestore() {
+        async function loadDailyTargetsFromSupabase() {
             try {
-                const doc = await db.collection('settings').doc('dailyTargets').get();
-                if (doc.exists) {
-                    dailyTargets = doc.data();
+                const { data, error } = await supabaseClient
+                    .from('daily_targets')
+                    .select('*');
+                if (error) throw error;
+                if (data && data.length > 0) {
+                    dailyTargets = {};
+                    data.forEach(row => {
+                        dailyTargets[row.plant] = row.target;
+                    });
                 } else {
-                    await db.collection('settings').doc('dailyTargets').set(dailyTargets);
+                    const defaultTargets = {
+                        Manukan: 100, Manyar: 80, Gempol: 90, Krian: 70,
+                        Kediri: 85, Denpasar2: 75, Denpasar3: 70, Gianyar: 95
+                    };
+                    const insertData = Object.entries(defaultTargets).map(([plant, target]) => ({ plant, target }));
+                    const { error: insertError } = await supabaseClient
+                        .from('daily_targets')
+                        .insert(insertData);
+                    if (insertError) throw insertError;
+                    dailyTargets = defaultTargets;
                 }
             } catch (error) {
                 console.error('Error loading targets:', error);
@@ -1719,10 +1743,17 @@
             loadDailyTargetsToUI();
         }
 
-        async function saveDailyTargetsToFirestore() {
+        async function saveDailyTargetsToSupabase() {
             showLoading();
             try {
-                await db.collection('settings').doc('dailyTargets').set(dailyTargets);
+                const upsertData = Object.entries(dailyTargets).map(([plant, target]) => ({
+                    plant,
+                    target
+                }));
+                const { error } = await supabaseClient
+                    .from('daily_targets')
+                    .upsert(upsertData, { onConflict: 'plant' });
+                if (error) throw error;
                 alert('Daily targets saved successfully!');
                 renderSummary();
             } catch (error) {
@@ -1754,7 +1785,7 @@
                 try { targetCount = Object.keys(JSON.parse(localTargets)).length; } catch(e) {}
             }
 
-            if (!confirm(`Migrasi data dari localStorage ke Firebase?\n\n📋 Schedule: ${scheduleCount} data\n🎯 Targets: ${targetCount} data\n\nData yang sama akan dilewati.`)) {
+            if (!confirm(`Migrasi data dari localStorage ke Supabase?\n\n📋 Schedule: ${scheduleCount} data\n🎯 Targets: ${targetCount} data\n\nData yang sama akan dilewati.`)) {
                 return;
             }
 
@@ -1767,56 +1798,58 @@
 
             try {
                 if (localSchedules) {
-                    const schedules = JSON.parse(localSchedules);
-                    const existingDocs = await db.collection('schedules').get();
-                    const existingIds = new Set();
-                    existingDocs.forEach(doc => {
-                        const data = doc.data();
-                        const key = `${data.projectName}|${data.plant}|${data.date}|${data.time}|${data.volume}`;
-                        existingIds.add(key);
+                    const schedulesLocal = JSON.parse(localSchedules);
+                    const { data: existingData, error: fetchError } = await supabaseClient
+                        .from('schedules')
+                        .select('project_name, plant, date, time, volume');
+                    if (fetchError) throw fetchError;
+                    const existingKeys = new Set();
+                    existingData.forEach(row => {
+                        const key = `${row.project_name}|${row.plant}|${row.date}|${row.time}|${row.volume}`;
+                        existingKeys.add(key);
                     });
 
-                    for (const schedule of schedules) {
+                    for (const schedule of schedulesLocal) {
                         const key = `${schedule.projectName}|${schedule.plant}|${schedule.date}|${schedule.time}|${schedule.volume}`;
-                        if (existingIds.has(key)) {
+                        if (existingKeys.has(key)) {
                             skippedSchedules++;
                             continue;
                         }
-                        await db.collection('schedules').add({
-                            projectName: schedule.projectName,
+                        const dbData = {
+                            project_name: schedule.projectName,
                             plant: schedule.plant,
                             volume: schedule.volume,
                             date: schedule.date,
                             time: schedule.time,
                             notes: schedule.notes || '',
-                            isDaily: schedule.isDaily || false,
-                            migratedFromLocal: true,
-                            migratedAt: new Date().toISOString()
-                        });
+                            is_daily: schedule.isDaily || false
+                        };
+                        const { error: insertError } = await supabaseClient
+                            .from('schedules')
+                            .insert([dbData]);
+                        if (insertError) throw insertError;
                         migratedSchedules++;
                     }
                 }
 
                 if (localTargets) {
-                    const targets = JSON.parse(localTargets);
-                    const targetDoc = await db.collection('settings').doc('dailyTargets').get();
-                    let existingTargets = targetDoc.exists ? targetDoc.data() : {};
-                    let needUpdate = false;
-                    for (const [key, value] of Object.entries(targets)) {
-                        if (!existingTargets[key] || existingTargets[key] !== value) {
-                            existingTargets[key] = value;
-                            migratedTargets++;
-                            needUpdate = true;
-                        }
-                    }
-                    if (needUpdate) {
-                        await db.collection('settings').doc('dailyTargets').set(existingTargets);
+                    const targetsLocal = JSON.parse(localTargets);
+                    const upsertData = Object.entries(targetsLocal).map(([plant, target]) => ({
+                        plant,
+                        target
+                    }));
+                    if (upsertData.length > 0) {
+                        const { error: upsertError } = await supabaseClient
+                            .from('daily_targets')
+                            .upsert(upsertData, { onConflict: 'plant' });
+                        if (upsertError) throw upsertError;
+                        migratedTargets = upsertData.length;
                     }
                 }
 
                 hideLoading();
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Migrate Data to Firebase';
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Migrate Data to Supabase';
 
                 let msg = `✅ Migrasi selesai!\n📋 Schedule: ${migratedSchedules} data\n`;
                 if (skippedSchedules > 0) msg += `⏭️ ${skippedSchedules} data dilewati\n`;
@@ -1827,13 +1860,13 @@
                 migrateStatus.innerHTML = `<i class="fas fa-check-circle"></i> ✅ ${migratedSchedules + migratedTargets} data migrated!`;
                 setTimeout(() => migrateStatus.style.display = 'none', 8000);
 
-                await loadSchedulesFromFirestore();
+                await loadSchedulesFromSupabase();
 
             } catch (error) {
                 console.error('Migration error:', error);
                 hideLoading();
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Migrate Data to Firebase';
+                btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Migrate Data to Supabase';
                 alert(`❌ Gagal migrasi: ${error.message}`);
             }
         });
@@ -2262,7 +2295,7 @@
 
         window.deleteSchedule = async function(id) {
             if (!confirm('Hapus schedule ini?')) return;
-            const success = await deleteScheduleFromFirestore(id);
+            const success = await deleteScheduleFromSupabase(id);
             if (success) {
                 schedules = schedules.filter(s => s.id !== id);
                 renderAll();
@@ -2292,7 +2325,7 @@
                         alert('Start date cannot be after end date!');
                         return;
                     }
-                    await deleteScheduleFromFirestore(editingScheduleId);
+                    await deleteScheduleFromSupabase(editingScheduleId);
                     schedules = schedules.filter(s => s.id !== editingScheduleId);
 
                     const current = new Date(startDate);
@@ -2302,13 +2335,13 @@
                         current.setDate(current.getDate() + 1);
                     }
                     for (const s of newSchedules) {
-                        const id = await saveScheduleToFirestore(s);
+                        const id = await saveScheduleToSupabase(s);
                         if (id) schedules.push({ ...s, id });
                     }
                 } else {
                     const date = document.getElementById('date').value;
                     data.date = date;
-                    const success = await updateScheduleInFirestore(editingScheduleId, data);
+                    const success = await updateScheduleInSupabase(editingScheduleId, data);
                     if (success) {
                         const idx = schedules.findIndex(s => s.id === editingScheduleId);
                         if (idx !== -1) schedules[idx] = { ...data, id: editingScheduleId };
@@ -2343,7 +2376,7 @@
                 }
 
                 for (const s of newSchedules) {
-                    const id = await saveScheduleToFirestore(s);
+                    const id = await saveScheduleToSupabase(s);
                     if (id) schedules.push({ ...s, id });
                 }
                 alert(`${newSchedules.length} entries saved!`);
@@ -2543,7 +2576,7 @@
                 Denpasar3: parseFloat(document.getElementById('target-denpasar3').value) || 0,
                 Gianyar: parseFloat(document.getElementById('target-gianyar').value) || 0
             };
-            await saveDailyTargetsToFirestore();
+            await saveDailyTargetsToSupabase();
         });
 
         // ============================================================
@@ -2575,12 +2608,11 @@
         updateGlobalFilterDisplay();
 
         async function init() {
-            await loadDailyTargetsFromFirestore();
-            await loadSchedulesFromFirestore();
+            await loadDailyTargetsFromSupabase();
+            await loadSchedulesFromSupabase();
         }
 
         init();
     </script>
 </body>
 </html>
-            
