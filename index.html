@@ -356,16 +356,15 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            z-index: 101;
+            z-index: 1101;
             border-radius: 8px;
             backdrop-filter: blur(4px);
             touch-action: manipulation;
             -webkit-touch-callout: none;
-            transition: background 0.2s;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s;
         }
         .floating-toggle:active {
             transform: scale(0.9);
-            background: rgba(0,0,0,0.4);
         }
         .floating-toggle i {
             font-size: 0.9rem;
@@ -662,7 +661,7 @@
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             letter-spacing: 0.3px;
             position: sticky;
             top: 0;
@@ -807,7 +806,7 @@
             background: var(--primary);
             color: white;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
             position: sticky;
             top: 0;
@@ -975,6 +974,77 @@
                 padding: 3px 6px;
             }
         }
+
+        /* ============================================================
+           FIX: TOGGLE SIDEBAR — SELALU TERLIHAT
+           ============================================================ */
+        .floating-toggle {
+            display: flex !important;
+            z-index: 1101 !important;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s !important;
+        }
+
+        body.sidebar-is-open .floating-toggle {
+            left: calc(var(--sidebar-width) + 8px) !important;
+            background: rgba(231, 76, 60, 0.95) !important;
+        }
+
+        body.sidebar-is-open .floating-toggle:hover {
+            background: rgba(192, 57, 43, 1) !important;
+        }
+
+        @media (max-width: 767px) {
+            body.sidebar-is-open .floating-toggle {
+                left: auto !important;
+                right: 10px !important;
+                top: calc((var(--header-height) - 28px) / 2) !important;
+            }
+        }
+
+        /* ============================================================
+           FIX: FONT SIZE DATA TABEL — NAIK 1 LEVEL
+           ============================================================ */
+        table tbody td {
+            font-size: 0.78rem !important;
+        }
+
+        .summary-detail-table tbody td {
+            font-size: 0.72rem !important;
+        }
+
+        table th {
+            font-size: 0.85rem !important;
+        }
+
+        .summary-detail-table th {
+            font-size: 0.8rem !important;
+        }
+
+        .summary-detail-table .total-row td,
+        .summary-detail-table .plant-header td {
+            font-size: 0.76rem !important;
+        }
+
+        .daily-indicator {
+            font-size: 0.6rem !important;
+        }
+
+        /* ============================================================
+           FIX: FONT SIZE TAB PLANT — NAIK 1 LEVEL
+           ============================================================ */
+        .plant-tab {
+            font-size: 0.72rem !important;
+            padding: 7px 12px !important;
+            min-height: 36px !important;
+        }
+
+        @media (max-width: 767px) {
+            .plant-tab {
+                font-size: 0.65rem !important;
+                padding: 5px 9px !important;
+                min-height: 32px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1057,7 +1127,7 @@
     <header>
         <div class="header-wrapper">
             <div class="header-left">
-                <button class="floating-toggle" id="floatingToggle">
+                <button class="floating-toggle" id="floatingToggle" type="button" aria-label="Toggle sidebar">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="header-text">
@@ -1229,8 +1299,8 @@
                         <div class="plant-tab" data-plant="Gempol">Gempol</div>
                         <div class="plant-tab" data-plant="Krian">Krian</div>
                         <div class="plant-tab" data-plant="Kediri">Kediri</div>
-                        <div class="plant-tab" data-plant="Denpasar2">Dps2</div>
-                        <div class="plant-tab" data-plant="Denpasar3">Dps3</div>
+                        <div class="plant-tab" data-plant="Denpasar2">Denpasar2</div>
+                        <div class="plant-tab" data-plant="Denpasar3">Denpasar3</div>
                         <div class="plant-tab" data-plant="Gianyar">Gianyar</div>
                     </div>
                     <div class="table-wrapper">
@@ -1323,8 +1393,8 @@
                         <div class="plant-tab" data-plant="Gempol">Gempol</div>
                         <div class="plant-tab" data-plant="Krian">Krian</div>
                         <div class="plant-tab" data-plant="Kediri">Kediri</div>
-                        <div class="plant-tab" data-plant="Denpasar2">Dps2</div>
-                        <div class="plant-tab" data-plant="Denpasar3">Dps3</div>
+                        <div class="plant-tab" data-plant="Denpasar2">Denpasar2</div>
+                        <div class="plant-tab" data-plant="Denpasar3">Denpasar3</div>
                         <div class="plant-tab" data-plant="Gianyar">Gianyar</div>
                     </div>
                     <div class="table-wrapper">
@@ -1446,6 +1516,17 @@
         // ============================================================
         // ===== SIDEBAR TOGGLE =====
         // ============================================================
+        function updateToggleIcon() {
+            const isOpen = sidebar.classList.contains('open');
+            document.body.classList.toggle('sidebar-is-open', isOpen);
+            const icon = floatingToggle.querySelector('i');
+            if (icon) {
+                icon.className = isOpen ? 'fas fa-times' : 'fas fa-bars';
+            }
+            floatingToggle.setAttribute('aria-label', isOpen ? 'Tutup sidebar' : 'Buka sidebar');
+            floatingToggle.setAttribute('title', isOpen ? 'Tutup Sidebar' : 'Buka Sidebar');
+        }
+
         function toggleSidebar(open) {
             const isMobile = window.innerWidth < 768;
             
@@ -1478,6 +1559,8 @@
                 sidebar.classList.toggle('open');
                 mainContainer.classList.toggle('expanded');
             }
+            
+            updateToggleIcon();
         }
 
         floatingToggle.addEventListener('click', function(e) {
@@ -1494,6 +1577,8 @@
         sidebarOverlay.addEventListener('click', function() {
             toggleSidebar(false);
         });
+
+        document.body.classList.remove('sidebar-is-open');
 
         // ============================================================
         // ===== FUNGSI GLOBAL DATE FILTER =====
@@ -2610,6 +2695,9 @@
         }
 
         init();
+
+        // Pastikan state awal: sidebar tertutup, ikon = bars
+        document.body.classList.remove('sidebar-is-open');
     </script>
 </body>
 </html>
