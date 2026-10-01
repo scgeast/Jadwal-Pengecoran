@@ -661,7 +661,7 @@
             color: white;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             letter-spacing: 0.3px;
             position: sticky;
             top: 0;
@@ -806,7 +806,7 @@
             background: var(--primary);
             color: white;
             font-weight: 600;
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             position: sticky;
             top: 0;
@@ -1009,7 +1009,7 @@
         }
 
         .summary-detail-table tbody td {
-            font-size: 0.72rem !important;
+            font-size: 0.78rem !important;
         }
 
         table th {
@@ -1017,12 +1017,12 @@
         }
 
         .summary-detail-table th {
-            font-size: 0.8rem !important;
+            font-size: 0.85rem !important;
         }
 
         .summary-detail-table .total-row td,
         .summary-detail-table .plant-header td {
-            font-size: 0.76rem !important;
+            font-size: 0.78rem !important;
         }
 
         .daily-indicator {
@@ -1043,6 +1043,32 @@
                 font-size: 0.65rem !important;
                 padding: 5px 9px !important;
                 min-height: 32px !important;
+            }
+        }
+
+        /* ============================================================
+           FIX: FONT & SIZE NAV TAB — NAIK 1 LEVEL
+           ============================================================ */
+        nav ul li a {
+            font-size: 0.7rem !important;
+            padding: 8px 12px !important;
+            min-height: 52px !important;
+            gap: 2px !important;
+        }
+
+        nav ul li a i {
+            font-size: 1.05rem !important;
+            margin-bottom: 2px !important;
+        }
+
+        @media (max-width: 767px) {
+            nav ul li a {
+                font-size: 0.62rem !important;
+                padding: 6px 10px !important;
+                min-height: 48px !important;
+            }
+            nav ul li a i {
+                font-size: 0.95rem !important;
             }
         }
     </style>
@@ -1166,7 +1192,7 @@
                     </a></li>
                     <li><a href="#" class="nav-link" data-target="summary-detail-section">
                         <i class="fas fa-table"></i>
-                        <span>Detail</span>
+                        <span>Summary Detail</span>
                     </a></li>
                     <li><a href="#" class="nav-link" data-target="chart-section">
                         <i class="fas fa-chart-pie"></i>
